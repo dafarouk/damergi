@@ -1,0 +1,259 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{enumitem}
+
+\definecolor{damerginavy}{HTML}{171D29}
+\definecolor{damergigold}{HTML}{9C7540}
+\definecolor{damergicream}{HTML}{F8F6F1}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=damerginavy,
+  urlcolor=damergigold,
+  pdftitle={DAMERGI.COM -- Documentation v0.7.1},
+  pdfauthor={Ahmed-Farouk DAMERGI}
+}
+
+\setlist[itemize]{leftmargin=1.5em,itemsep=0.25em,topsep=0.4em}
+\setlist[enumerate]{leftmargin=1.7em,itemsep=0.25em,topsep=0.4em}
+
+\newcommand{\tech}[1]{\texttt{#1}}
+\newcommand{\version}{0.7.1}
+
+\begin{document}
+
+\begin{center}
+  {\color{damergigold}\rule{0.72\textwidth}{0.8pt}}\\[1.2em]
+  {\Large\bfseries AFD -- AHMED-FAROUK DAMERGI}\\[1.1em]
+  {\Huge\bfseries DAMERGI.COM}\\[0.5em]
+  {\Large Portfolio Data \& Business Analyst}\\[1.2em]
+  {\large Documentation technique et produit -- version \version}\\[0.8em]
+  {\small Patch documentaire cumulatif de la version 0.7.0}\\[1.2em]
+  {\color{damergigold}\rule{0.72\textwidth}{0.8pt}}
+\end{center}
+
+\vspace{1em}
+
+\begin{quote}
+\textbf{Statut documentaire.} Aucun source LaTeX antérieur n'était présent dans le dossier
+\tech{docs/} au moment de cette évolution ; seule la documentation complète
+\tech{damergi\_documentation\_v0.7.0.pdf} était disponible. Ce document conserve ce PDF
+historique sans le modifier et constitue le patch versionné 0.7.1. Toutes les décisions,
+contraintes et sections de la version 0.7.0 qui ne sont pas remplacées ci-dessous restent
+applicables. En cas de reprise du projet, lire d'abord le PDF 0.7.0 puis ce source 0.7.1.
+\end{quote}
+
+\tableofcontents
+
+\section{Objet de la version 0.7.1}
+
+La version 0.7.1 enrichit l'écosystème animé de la section \emph{Expertise / Ce que je fais}
+avec une septième branche consacrée au développement et au prototypage autour de la donnée.
+Cette évolution montre la capacité à construire des interfaces, des outils internes, des
+prototypes et des applications d'appui sans modifier le positionnement principal du portfolio :
+\textbf{Data \& Business Analyst}.
+
+La version ne crée aucune nouvelle expérience professionnelle et ne modifie ni les métriques
+vérifiées, ni la timeline, ni ses modales, ni les comportements stables du hero. TypeScript,
+React et Next.js sont notamment présentés comme des technologies démontrées par
+DAMERGI.COM lui-même.
+
+\section{Architecture conservée}
+
+L'architecture décrite en version 0.7.0 reste inchangée :
+
+\begin{verbatim}
+app/page.tsx
+  +-- Navbar / LoadingScreen / PageProgress
+  +-- StoryHero
+  +-- ExpertiseSection
+
+data/
+  +-- timeline.ts
+  +-- timelineDetails.ts
+
+app/globals.css
+  +-- design system clair/sombre
+  +-- responsive et reduced motion
+\end{verbatim}
+
+La nouvelle expertise est déclarée dans le contenu bilingue de
+\tech{components/Expertise/ExpertiseSection.tsx}. Les chemins SVG et positions de nœuds
+restent centralisés par clé d'expertise dans le même composant. Aucun changement n'est
+nécessaire dans \tech{app/page.tsx}, \tech{data/timeline.ts},
+\tech{data/timelineDetails.ts} ou \tech{app/globals.css}.
+
+\section{Septième expertise}
+
+\subsection{Contenu français}
+
+\begin{description}[leftmargin=3.3cm,style=nextline]
+  \item[Titre] Développement \& Prototypage
+  \item[Sous-titre] Outils \& interfaces autour de la donnée
+  \item[Sélection compacte] TypeScript · JavaScript · React · Next.js
+\end{description}
+
+La description précise que le domaine concerne les interfaces, outils internes, prototypes et
+applications d'appui autour de la donnée. Elle indique explicitement que le portfolio démontre
+le volet TypeScript, React et Next.js, sans transformer le titre professionnel en Software
+Engineer ou Web Developer.
+
+\subsection{Contenu anglais}
+
+\begin{description}[leftmargin=3.3cm,style=nextline]
+  \item[Title] Development \& Prototyping
+  \item[Subtitle] Tools \& interfaces around data
+  \item[Compact selection] TypeScript · JavaScript · React · Next.js
+\end{description}
+
+Le contenu anglais applique la même nuance de positionnement et les mêmes limites de
+véracité que le contenu français.
+
+\section{Organisation des technologies}
+
+La carte détaillée organise les technologies en trois groupes conceptuels :
+
+\begin{tabularx}{\textwidth}{>{\bfseries}p{0.29\textwidth}X}
+  Programmation / Scripting & Python, JavaScript, TypeScript, VBA \\
+  Web / UI & HTML5, CSS3, React, Next.js \\
+  Outils de développement & Git, GitHub, VS Code \\
+\end{tabularx}
+
+La liste complète apparaît dans la description et sous forme de groupes de badges. Les autres
+cartes conservent leur structure et leurs technologies existantes. Le modèle
+\tech{ExpertiseItem} accepte désormais un sous-titre et des groupes d'outils optionnels ; les
+six branches historiques continuent d'utiliser leur tableau plat sans migration inutile.
+
+\section{Comportement du réseau desktop et tablette}
+
+Le réseau SVG comporte désormais sept chemins réels depuis le nœud central
+\textbf{DATA \& BUSINESS}. La nouvelle branche est placée dans la zone inférieure droite. La
+branche Data Quality est légèrement remontée afin de conserver une respiration suffisante et
+d'éviter les collisions de cartes ou de texte.
+
+Chaque branche, y compris la nouvelle, conserve le contrat interactif existant :
+
+\begin{itemize}
+  \item tracé SVG neutre par défaut et doré lorsqu'il est actif ;
+  \item animation initiale du tracé via \tech{pathLength} ;
+  \item deux particules \tech{animateMotion} parcourant exactement le chemin associé ;
+  \item activation synchronisée entre la carte détaillée, le chemin et le nœud ;
+  \item activation au survol, au focus clavier et au clic ;
+  \item attribut \tech{aria-pressed} reflétant l'état actif ;
+  \item palette alimentée par les variables existantes en mode clair et sombre.
+\end{itemize}
+
+À 768 px, la visualisation SVG desktop/tablette reste affichée sous la liste des cartes. À partir
+du breakpoint \tech{lg}, elle reprend sa place dans la deuxième colonne de la composition. Le
+nœud central reste volontairement décalé très légèrement vers la gauche afin d'équilibrer les
+trois branches gauches et les quatre branches droites.
+
+\section{Comportement mobile}
+
+Sous 768 px, l'écosystème simplifié conserve le centre, la spine verticale animée et les nœuds
+en grille de deux colonnes. Comme le nombre de domaines est impair, le septième nœud
+\emph{Développement \& Prototypage / Development \& Prototyping} occupe volontairement les
+deux colonnes de la dernière ligne. Cette règle évite une cellule vide accidentelle et donne une
+conclusion visuelle claire au réseau.
+
+Les sept cartes détaillées restent empilées sur une colonne. Le mobile ne reçoit ni curseur
+personnalisé ni tilt dépendant de la souris. Les boutons du réseau mobile répondent au focus, au
+survol disponible et au clic, et exposent également leur état avec \tech{aria-pressed}.
+
+\section{Identité visuelle, animation et accessibilité}
+
+La version 0.7.1 conserve sans modification :
+
+\begin{itemize}
+  \item l'identité crème, navy et or ;
+  \item les variables dédiées aux thèmes clair et sombre ;
+  \item le mouvement du pattern, de l'aura et du ticker ;
+  \item les transitions Motion, le tilt subtil et le curseur desktop ;
+  \item le focus visible doré ;
+  \item la suppression du curseur custom sur pointeur grossier ;
+  \item la règle globale \tech{prefers-reduced-motion: reduce} ;
+  \item les métriques Air France déjà documentées et vérifiées.
+\end{itemize}
+
+Aucune information essentielle ne dépend du mouvement : titres, descriptions, outils et état
+actif restent compréhensibles lorsque les animations sont réduites.
+
+\section{Règles de contenu et de positionnement}
+
+Cette branche décrit une capacité complémentaire au travail Data et Business. Elle ne doit pas
+devenir un changement de métier affiché. Les formulations futures doivent respecter les règles
+suivantes :
+
+\begin{enumerate}
+  \item maintenir \textbf{Data \& Business Analyst} comme titre principal ;
+  \item parler d'outils et d'interfaces \emph{autour de la donnée} ;
+  \item ne pas attribuer un usage professionnel à React, Next.js ou TypeScript sans preuve ;
+  \item pouvoir citer DAMERGI.COM comme démonstration directe de TypeScript, React et Next.js ;
+  \item ne jamais inventer de mission, client, résultat, date ou métrique.
+\end{enumerate}
+
+\section{Matrice de vérification responsive}
+
+\begin{tabularx}{\textwidth}{p{0.16\textwidth}p{0.25\textwidth}X}
+  \textbf{Largeur} & \textbf{Mode} & \textbf{Contrôle Expertise 0.7.1} \\
+  390 px & Smartphone étroit & Sept cartes lisibles ; dernier nœud mobile sur toute la ligne ; aucun débordement horizontal. \\
+  430 px & Smartphone large & Groupes de badges lisibles ; rythme vertical et grille mobile équilibrés. \\
+  768 px & Tablette portrait & Cartes sur une colonne ; réseau SVG complet et sept branches visibles sans chevauchement. \\
+  Desktop & Deux colonnes & Nouvelle branche en bas à droite ; centre équilibré ; chemins et libellés séparés. \\
+\end{tabularx}
+
+Les vérifications doivent être répétées en français et en anglais, en clair et en sombre, au
+clavier et avec la préférence de mouvement réduit.
+
+\section{Fichiers concernés}
+
+\begin{description}[leftmargin=5.4cm,style=nextline]
+  \item[\tech{components/Expertise/ExpertiseSection.tsx}] septième clé, contenus FR/EN,
+  groupes de technologies, chemin et position SVG, synchronisation interactive et traitement
+  de la dernière ligne mobile.
+  \item[\tech{docs/damergi\_documentation\_v0.7.1.tex}] présent document.
+  \item[\tech{docs/damergi\_documentation\_v0.7.1.pdf}] version compilée lorsque LaTeX est
+  disponible localement.
+\end{description}
+
+Le PDF historique \tech{docs/damergi\_documentation\_v0.7.0.pdf} est conservé intact.
+
+\section{Historique des versions}
+
+Les versions sont des jalons documentaires internes et ne supposent pas l'existence d'un tag
+Git public.
+
+\begin{tabularx}{\textwidth}{p{0.12\textwidth}p{0.21\textwidth}X}
+  \textbf{Version} & \textbf{Étape} & \textbf{Principales modifications} \\
+  0.1.0 & Bootstrap & Création Next.js et structure initiale. \\
+  0.2.0 & Branding & Palette crème/navy/or, logo AFD, navbar, portrait, contacts et ticker. \\
+  0.3.0 & Storytelling & Timeline narrative, portrait, pattern animé et aura. \\
+  0.4.0 & Navigation & Timeline cliquable, FR/EN, thème, loader et favicon. \\
+  0.5.0 & Détail & Modales, navigation et modes image/logo/tools. \\
+  0.6.0 & Responsive & Hero, timeline et modales mobiles, CV et persistance. \\
+  0.7.0 & Pré-déploiement & Expertise interactive à six branches, réseau animé, métriques, SEO, Open Graph, 404, robots et sitemap. \\
+  \textbf{0.7.1} & \textbf{Expertise} & \textbf{Septième branche Développement \& Prototypage, réseau desktop rééquilibré, particules dédiées, technologies groupées, dernier nœud mobile pleine largeur et documentation du portfolio comme preuve TypeScript/React/Next.js.} \\
+\end{tabularx}
+
+\section{Continuité}
+
+Les règles de maintenance de la version 0.7.0 restent en vigueur : modifier localement, tester
+FR/EN, clair/sombre et les largeurs de référence, conserver les zones stables, exécuter les
+contrôles TypeScript/lint/build, puis documenter chaque évolution significative. Le couple
+\tech{damergi\_documentation\_v0.7.0.pdf} + présent document constitue la documentation de
+référence de la version 0.7.1.
+
+\vfill
+\begin{center}
+  {\color{damergigold}\rule{0.55\textwidth}{0.6pt}}\\[0.8em]
+  \textbf{Fin de la documentation -- DAMERGI.COM -- Version \version}
+\end{center}
+
+\end{document}
