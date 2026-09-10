@@ -7,8 +7,10 @@ import {
   BookOpenText,
   BriefcaseBusiness,
   Home,
+  Menu,
   Moon,
   Sun,
+  X,
 } from "lucide-react";
 
 import {
@@ -47,6 +49,11 @@ export default function Navbar({
     setDarkMode,
   ] = useState(false);
 
+  const [
+    mobileMenuOpen,
+    setMobileMenuOpen,
+  ] = useState(false);
+
   useEffect(() => {
     const savedTheme =
       localStorage.getItem(
@@ -61,6 +68,10 @@ export default function Navbar({
       setDarkMode(true);
     }
   }, []);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   function toggleTheme() {
     const nextTheme =
@@ -90,6 +101,8 @@ export default function Navbar({
   }
 
   function openRecruiterMode() {
+    setMobileMenuOpen(false);
+
     window.dispatchEvent(
       new Event(
         "damergi:open-recruiter"
@@ -228,6 +241,35 @@ export default function Navbar({
 
             </div>
 
+            {/* MOBILE MENU */}
+            <button
+              type="button"
+              onClick={() =>
+                setMobileMenuOpen(
+                  (current) => !current
+                )
+              }
+              aria-expanded={mobileMenuOpen}
+              aria-label={
+                language === "fr"
+                  ? "Ouvrir le menu"
+                  : "Open menu"
+              }
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/80 transition hover:bg-white/10 hover:text-white md:hidden"
+            >
+              {mobileMenuOpen ? (
+                <X
+                  size={17}
+                  strokeWidth={1.8}
+                />
+              ) : (
+                <Menu
+                  size={18}
+                  strokeWidth={1.8}
+                />
+              )}
+            </button>
+
             <button
               type="button"
               onClick={toggleTheme}
@@ -263,11 +305,8 @@ export default function Navbar({
 
           </div>
 
-          {/* =================================================
-              BOTTOM-RIGHT NAV TABS
-          ================================================== */}
-
-          <div className="absolute bottom-0 right-3 z-20 flex items-end gap-1 sm:right-6 lg:right-14">
+          {/* DESKTOP / TABLET TABS */}
+          <div className="absolute bottom-0 right-3 z-20 hidden items-end gap-1 sm:right-6 md:flex lg:right-14">
 
             {/* PORTFOLIO */}
             <a
@@ -282,26 +321,11 @@ export default function Navbar({
                   ? "page"
                   : undefined
               }
-              title={
-                language === "fr"
-                  ? "Mon portfolio"
-                  : "My portfolio"
-              }
               className={`
-                relative
-                flex
-                h-8
-                w-9
-                items-center
-                justify-center
-                gap-2
-                rounded-t-lg
-                border
-                border-b-0
-                transition-all
-                duration-300
-                lg:w-auto
-                lg:px-4
+                relative flex h-8 w-9 items-center justify-center gap-2
+                rounded-t-lg border border-b-0
+                transition-all duration-300
+                lg:w-auto lg:px-4
 
                 ${
                   onPortfolioPage
@@ -322,7 +346,6 @@ export default function Navbar({
                 }
               `}
             >
-
               <Home
                 size={14}
                 strokeWidth={1.8}
@@ -337,10 +360,9 @@ export default function Navbar({
               {onPortfolioPage && (
                 <span className="absolute left-2 right-2 top-0 h-[2px] bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
               )}
-
             </a>
 
-            {/* GUIDE CV */}
+            {/* CV GUIDE */}
             <a
               href="/cv-guide"
               aria-label={
@@ -353,26 +375,11 @@ export default function Navbar({
                   ? "page"
                   : undefined
               }
-              title={
-                language === "fr"
-                  ? "Guide CV"
-                  : "CV Guide"
-              }
               className={`
-                relative
-                flex
-                h-8
-                w-9
-                items-center
-                justify-center
-                gap-2
-                rounded-t-lg
-                border
-                border-b-0
-                transition-all
-                duration-300
-                lg:w-auto
-                lg:px-4
+                relative flex h-8 w-9 items-center justify-center gap-2
+                rounded-t-lg border border-b-0
+                transition-all duration-300
+                lg:w-auto lg:px-4
 
                 ${
                   onGuidePage
@@ -393,7 +400,6 @@ export default function Navbar({
                 }
               `}
             >
-
               <BookOpenText
                 size={14}
                 strokeWidth={1.8}
@@ -408,45 +414,23 @@ export default function Navbar({
               {onGuidePage && (
                 <span className="absolute left-2 right-2 top-0 h-[2px] bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
               )}
-
             </a>
 
             {/* RECRUITER */}
             <button
               type="button"
               onClick={openRecruiterMode}
-              aria-label={
-                language === "fr"
-                  ? "Vous êtes recruteur ?"
-                  : "Are you a recruiter?"
-              }
-              title={
-                language === "fr"
-                  ? "Vous êtes recruteur ?"
-                  : "Are you a recruiter?"
-              }
               className="
-                relative
-                flex
-                h-8
-                w-9
-                items-center
-                justify-center
-                gap-2
-                rounded-t-lg
-                border
-                border-b-0
+                relative flex h-8 w-9 items-center justify-center gap-2
+                rounded-t-lg border border-b-0
                 border-[#bc965d]/50
                 bg-[#bc965d]/[0.10]
                 text-[#e5c48f]
                 shadow-[0_-4px_20px_rgba(188,150,93,0.10)]
-                transition-all
-                duration-300
+                transition-all duration-300
                 hover:border-[#d2ad73]
                 hover:bg-[#bc965d]/20
-                hover:shadow-[0_-4px_24px_rgba(188,150,93,0.22)]
-                lg:w-auto
-                lg:px-4
+                lg:w-auto lg:px-4
               "
             >
 
@@ -477,6 +461,72 @@ export default function Navbar({
 
         </nav>
 
+        {/* MOBILE DROPDOWN */}
+        {mobileMenuOpen && (
+          <div className="absolute right-3 top-[calc(100%-6px)] z-50 w-[220px] overflow-hidden rounded-2xl border border-white/10 bg-[#111827] p-2 shadow-[0_20px_60px_rgba(0,0,0,0.42)] md:hidden">
+
+            <a
+              href="/"
+              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition ${
+                onPortfolioPage
+                  ? "bg-white/[0.10] text-white"
+                  : "text-white/65 hover:bg-white/[0.06] hover:text-white"
+              }`}
+            >
+              <Home
+                size={16}
+                strokeWidth={1.8}
+              />
+
+              {language === "fr"
+                ? "Mon portfolio"
+                : "My portfolio"}
+            </a>
+
+            <a
+              href="/cv-guide"
+              className={`mt-1 flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition ${
+                onGuidePage
+                  ? "bg-white/[0.10] text-white"
+                  : "text-white/65 hover:bg-white/[0.06] hover:text-white"
+              }`}
+            >
+              <BookOpenText
+                size={16}
+                strokeWidth={1.8}
+              />
+
+              {language === "fr"
+                ? "Guide CV"
+                : "CV Guide"}
+            </a>
+
+            <button
+              type="button"
+              onClick={openRecruiterMode}
+              className="mt-1 flex w-full items-center gap-3 rounded-xl border border-[#bc965d]/20 bg-[#bc965d]/[0.08] px-4 py-3 text-left text-sm text-[#e0bd88] transition hover:border-[#bc965d]/45 hover:bg-[#bc965d]/15"
+            >
+              <span className="relative flex h-2 w-2 shrink-0">
+
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#bc965d] opacity-40" />
+
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#d2ad73]" />
+
+              </span>
+
+              <BriefcaseBusiness
+                size={16}
+                strokeWidth={1.8}
+              />
+
+              {language === "fr"
+                ? "Vous êtes recruteur ?"
+                : "Are you a recruiter?"}
+            </button>
+
+          </div>
+        )}
+
       </header>
 
       <RecruiterMode
@@ -485,11 +535,6 @@ export default function Navbar({
     </>
   );
 }
-
-
-/* =========================================================
-   LANGUAGE BUTTON
-========================================================= */
 
 function LanguageButton({
   language,
@@ -509,7 +554,6 @@ function LanguageButton({
       }
       className="flex items-center gap-1.5 rounded-full px-1.5 py-2 text-[11px] font-semibold uppercase tracking-[0.04em] text-white/85 transition hover:bg-white/10 hover:text-white sm:gap-2 sm:px-2.5 sm:text-sm"
     >
-
       <span>
         {language === "fr"
           ? "FR"
@@ -521,15 +565,9 @@ function LanguageButton({
       ) : (
         <UKFlag />
       )}
-
     </button>
   );
 }
-
-
-/* =========================================================
-   FRANCE FLAG
-========================================================= */
 
 function FranceFlag() {
   return (
@@ -540,34 +578,12 @@ function FranceFlag() {
       className="shrink-0 overflow-hidden rounded-[2px] shadow-sm"
       aria-hidden="true"
     >
-      <rect
-        width="1"
-        height="2"
-        x="0"
-        fill="#002395"
-      />
-
-      <rect
-        width="1"
-        height="2"
-        x="1"
-        fill="#FFFFFF"
-      />
-
-      <rect
-        width="1"
-        height="2"
-        x="2"
-        fill="#ED2939"
-      />
+      <rect width="1" height="2" x="0" fill="#002395" />
+      <rect width="1" height="2" x="1" fill="#FFFFFF" />
+      <rect width="1" height="2" x="2" fill="#ED2939" />
     </svg>
   );
 }
-
-
-/* =========================================================
-   UK FLAG
-========================================================= */
 
 function UKFlag() {
   return (
@@ -578,17 +594,12 @@ function UKFlag() {
       className="shrink-0 overflow-hidden rounded-[2px] shadow-sm"
       aria-hidden="true"
     >
-
       <clipPath id="ukFlagClip">
         <path d="M0 0v30h60V0z" />
       </clipPath>
 
       <g clipPath="url(#ukFlagClip)">
-
-        <path
-          d="M0 0v30h60V0z"
-          fill="#012169"
-        />
+        <path d="M0 0v30h60V0z" fill="#012169" />
 
         <path
           d="M0 0 60 30M60 0 0 30"
@@ -613,9 +624,7 @@ function UKFlag() {
           stroke="#C8102E"
           strokeWidth="6"
         />
-
       </g>
-
     </svg>
   );
 }
