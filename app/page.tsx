@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import StoryHero from "@/components/Hero/StoryHero";
 import LoadingScreen from "@/components/Loading/LoadingScreen";
 import ExpertiseSection from "@/components/Expertise/ExpertiseSection";
+import NextChapterRadarController from "@/components/NextChapter/NextChapterRadarController";
 import PageProgress from "@/components/Progress/PageProgress";
 
 import type {
@@ -20,7 +21,9 @@ export default function Home() {
   const [
     language,
     setLanguage,
-  ] = useState<Language>("fr");
+  ] = useState<Language>(
+    "fr"
+  );
 
   const [
     pageLoaded,
@@ -47,10 +50,6 @@ export default function Home() {
       Date.now()
     );
 
-  /* =========================================
-     SAVED LANGUAGE
-  ========================================= */
-
   useEffect(() => {
     const savedLanguage =
       localStorage.getItem(
@@ -58,8 +57,10 @@ export default function Home() {
       );
 
     if (
-      savedLanguage === "fr" ||
-      savedLanguage === "en"
+      savedLanguage ===
+        "fr" ||
+      savedLanguage ===
+        "en"
     ) {
       setLanguage(
         savedLanguage
@@ -70,17 +71,15 @@ export default function Home() {
     }
   }, []);
 
-  /* =========================================
-     SMART INTRO DURATION
-  ========================================= */
-
   useEffect(() => {
     const alreadySeen =
       localStorage.getItem(
         "damergi-intro-seen"
       );
 
-    if (alreadySeen) {
+    if (
+      alreadySeen
+    ) {
       setLoaderDuration(
         850
       );
@@ -99,10 +98,6 @@ export default function Home() {
       true
     );
   }, []);
-
-  /* =========================================
-     REAL PAGE LOAD
-  ========================================= */
 
   useEffect(() => {
     const handleLoad =
@@ -131,10 +126,6 @@ export default function Home() {
       );
     };
   }, []);
-
-  /* =========================================
-     HIDE INTRO
-  ========================================= */
 
   useEffect(() => {
     if (
@@ -177,7 +168,8 @@ export default function Home() {
   ]);
 
   function changeLanguage(
-    nextLanguage: Language
+    nextLanguage:
+      Language
   ) {
     setLanguage(
       nextLanguage
@@ -214,6 +206,12 @@ export default function Home() {
         }
         onLanguageChange={
           changeLanguage
+        }
+      />
+
+      <NextChapterRadarController
+        language={
+          language
         }
       />
 

@@ -4,6 +4,7 @@ import {
   ArrowUpRight,
   BookOpenText,
   BriefcaseBusiness,
+  Building2,
   FileText,
   Home,
   Mail,
@@ -26,11 +27,16 @@ import {
 } from "react";
 
 import {
+  createPortal,
+} from "react-dom";
+
+import {
   usePathname,
 } from "next/navigation";
 
-import type {
-  Language,
+import {
+  timelineByLanguage,
+  type Language,
 } from "@/data/timeline";
 
 type CommandPaletteProps = {
@@ -42,6 +48,7 @@ type CommandItem = {
   label: string;
   description: string;
   keywords: string;
+  searchOnly?: boolean;
 
   icon: React.ComponentType<{
     size?: number;
@@ -55,7 +62,13 @@ type CommandItem = {
 export default function CommandPalette({
   language,
 }: CommandPaletteProps) {
-  const pathname = usePathname();
+  const pathname =
+    usePathname();
+
+  const [
+    mounted,
+    setMounted,
+  ] = useState(false);
 
   const [
     open,
@@ -80,14 +93,20 @@ export default function CommandPalette({
   const isFr =
     language === "fr";
 
+  useEffect(() => {
+    setMounted(true);
+
+    return () => {
+      setMounted(false);
+    };
+  }, []);
+
   function goToHash(
     id: string
   ) {
     setOpen(false);
 
-    if (
-      pathname !== "/"
-    ) {
+    if (pathname !== "/") {
       window.location.href =
         `/#${id}`;
 
@@ -125,9 +144,7 @@ export default function CommandPalette({
         ? "mobile-contact-panel"
         : "contact-panel";
 
-    if (
-      pathname !== "/"
-    ) {
+    if (pathname !== "/") {
       window.location.href =
         `/#${id}`;
 
@@ -175,6 +192,186 @@ export default function CommandPalette({
     );
   }
 
+  function goToGuideHash(
+    id: string
+  ) {
+    setOpen(false);
+
+    if (
+      pathname !==
+      "/cv-guide"
+    ) {
+      window.location.href =
+        `/cv-guide#${id}`;
+
+      return;
+    }
+
+    window.setTimeout(
+      () => {
+        document
+          .getElementById(
+            id
+          )
+          ?.scrollIntoView({
+            behavior:
+              "smooth",
+
+            block:
+              "start",
+          });
+      },
+      20
+    );
+  }
+
+  function goToChapter(
+    id: string
+  ) {
+    setOpen(false);
+
+    if (pathname !== "/") {
+      window.location.href =
+        `/?chapter=${id}`;
+
+      return;
+    }
+
+    const timeline =
+      timelineByLanguage[
+        language
+      ];
+
+    const index =
+      timeline.findIndex(
+        (
+          item
+        ) =>
+          item.id ===
+          id
+      );
+
+    if (index < 0)
+      return;
+
+    const desktop =
+      window.matchMedia(
+        "(min-width: 1024px)"
+      ).matches;
+
+    window.setTimeout(
+      () => {
+        if (desktop) {
+          const chapters =
+            document.querySelectorAll<HTMLElement>(
+              ".story-scroll .story-chapter"
+            );
+
+          chapters[
+            index
+          ]?.scrollIntoView({
+            behavior:
+              "smooth",
+
+            block:
+              "center",
+          });
+
+          return;
+        }
+
+        if (index === 0) {
+          document
+            .getElementById(
+              "home"
+            )
+            ?.scrollIntoView({
+              behavior:
+                "smooth",
+
+              block:
+                "start",
+            });
+
+          return;
+        }
+
+        const trigger =
+          document.querySelector<HTMLButtonElement>(
+            '[aria-controls="mobile-journey"]'
+          );
+
+        if (
+          trigger &&
+          trigger.getAttribute(
+            "aria-expanded"
+          ) !== "true"
+        ) {
+          trigger.click();
+        }
+
+        window.setTimeout(
+          () => {
+            const mobileChapters =
+              document.querySelectorAll<HTMLElement>(
+                "#mobile-journey article"
+              );
+
+            mobileChapters[
+              index - 1
+            ]?.scrollIntoView({
+              behavior:
+                "smooth",
+
+              block:
+                "center",
+            });
+          },
+          350
+        );
+      },
+      60
+    );
+  }
+
+  function openRecruiter() {
+    setOpen(false);
+
+    window.setTimeout(
+      () => {
+        window.dispatchEvent(
+          new Event(
+            "damergi:open-recruiter"
+          )
+        );
+      },
+      120
+    );
+  }
+
+  function openRadar() {
+    setOpen(false);
+
+    window.setTimeout(
+      () => {
+        if (
+          pathname ===
+          "/"
+        ) {
+          window.dispatchEvent(
+            new Event(
+              "damergi:open-job-radar"
+            )
+          );
+        } else {
+          window.location.href =
+            "/?radar=1";
+        }
+      },
+      120
+    );
+  }
+
   const commands =
     useMemo<
       CommandItem[]
@@ -195,7 +392,7 @@ export default function CommandPalette({
               : "Back to the beginning",
 
           keywords:
-            "portfolio accueil home",
+            "portfolio accueil home main",
 
           icon:
             Home,
@@ -221,14 +418,14 @@ export default function CommandPalette({
               : "See my journey",
 
           keywords:
-            "parcours journey timeline experience",
+            "parcours journey timeline experience career chronology",
 
           icon:
             Waypoints,
 
           action: () =>
-            goToHash(
-              "home"
+            goToChapter(
+              "intro"
             ),
         },
 
@@ -245,7 +442,7 @@ export default function CommandPalette({
               : "Data, BI, performance and automation",
 
           keywords:
-            "expertise skills data bi performance automation",
+            "expertise skills data bi performance automation power bi sql python excel tableau talend salesforce dax power query vba",
 
           icon:
             Sparkles,
@@ -267,19 +464,17 @@ export default function CommandPalette({
 
           description:
             isFr
-              ? "Objectif CDI 2027"
-              : "2027 permanent-role goal",
+              ? "Job-fit radar · Objectif CDI 2027"
+              : "Job-fit radar · 2027 permanent-role goal",
 
           keywords:
-            "next chapter cdi 2027 job permanent role",
+            "next chapter cdi 2027 job permanent role available availability radar",
 
           icon:
             BriefcaseBusiness,
 
-          action: () =>
-            goToHash(
-              "next-chapter"
-            ),
+          action:
+            openRadar,
         },
 
         {
@@ -288,34 +483,22 @@ export default function CommandPalette({
 
           label:
             isFr
-              ? "Mode recruteur"
-              : "Recruiter mode",
+              ? "Vous êtes recruteur ?"
+              : "Are you a recruiter?",
 
           description:
             isFr
-              ? "L'essentiel en 60 secondes"
-              : "The essentials in 60 seconds",
+              ? "L'essentiel de mon profil en 60 secondes"
+              : "My profile essentials in 60 seconds",
 
           keywords:
-            "recruiter recruteur summary resume 60 seconds",
+            "recruiter recruteur summary resume 60 seconds why me",
 
           icon:
             BriefcaseBusiness,
 
-          action: () => {
-            setOpen(false);
-
-            window.setTimeout(
-              () => {
-                window.dispatchEvent(
-                  new Event(
-                    "damergi:open-recruiter"
-                  )
-                );
-              },
-              120
-            );
-          },
+          action:
+            openRecruiter,
         },
 
         {
@@ -324,22 +507,24 @@ export default function CommandPalette({
 
           label:
             isFr
-              ? "Guide CV"
-              : "CV Guide",
+              ? "Besoin d'aide avec votre CV ?"
+              : "Need help with your CV?",
 
           description:
             isFr
-              ? "Guide ATS + LaTeX"
-              : "ATS + LaTeX guide",
+              ? "Guide pratique pour créer votre CV"
+              : "Practical guide to create your CV",
 
           keywords:
-            "guide cv resume ats latex overleaf",
+            "guide cv resume ats latex overleaf help aide creation template",
 
           icon:
             BookOpenText,
 
           action: () => {
-            setOpen(false);
+            setOpen(
+              false
+            );
 
             window.location.href =
               "/cv-guide";
@@ -361,13 +546,15 @@ export default function CommandPalette({
               : "Open the PDF",
 
           keywords:
-            "cv pdf resume",
+            "cv pdf resume document",
 
           icon:
             FileText,
 
           action: () => {
-            setOpen(false);
+            setOpen(
+              false
+            );
 
             window.open(
               "/cv/CV-Ahmed-Farouk-Damergi.pdf",
@@ -396,9 +583,311 @@ export default function CommandPalette({
           action:
             goToContact,
         },
+
+        /* SEARCH-ONLY */
+
+        {
+          id:
+            "air-france",
+
+          label:
+            "Air France",
+
+          description:
+            isFr
+              ? "Stage Data & Performance · 2026–2027"
+              : "Data & Performance internship · 2026–2027",
+
+          keywords:
+            "air france roissy cdg internship stage performance power bi sap bo reporting 2026 2027",
+
+          searchOnly:
+            true,
+
+          icon:
+            Building2,
+
+          action: () =>
+            goToChapter(
+              "airfrance"
+            ),
+        },
+
+        {
+          id:
+            "aycode",
+
+          label:
+            "AYcode",
+
+          description:
+            isFr
+              ? "Stage Data Analyst · 2025"
+              : "Data Analyst internship · 2025",
+
+          keywords:
+            "aycode 2025 mysql data analyst internship stage",
+
+          searchOnly:
+            true,
+
+          icon:
+            Building2,
+
+          action: () =>
+            goToChapter(
+              "aycode"
+            ),
+        },
+
+        {
+          id:
+            "concentrix",
+
+          label:
+            "Concentrix",
+
+          description:
+            isFr
+              ? "Qualité & Performance · 2024"
+              : "Quality & Performance · 2024",
+
+          keywords:
+            "concentrix 2024 quality performance operations qualité",
+
+          searchOnly:
+            true,
+
+          icon:
+            Building2,
+
+          action: () =>
+            goToChapter(
+              "concentrix"
+            ),
+        },
+
+        {
+          id:
+            "teleperformance",
+
+          label:
+            "Teleperformance",
+
+          description:
+            isFr
+              ? "Opérations → Assurance Qualité"
+              : "Operations → Quality Assurance",
+
+          keywords:
+            "teleperformance 2022 2023 operations quality assurance qualité",
+
+          searchOnly:
+            true,
+
+          icon:
+            Building2,
+
+          action: () =>
+            goToChapter(
+              "teleperformance"
+            ),
+        },
+
+        {
+          id:
+            "cytech",
+
+          label:
+            "CY Tech",
+
+          description:
+            isFr
+              ? "M2 · Double diplôme · 2025–2026"
+              : "M2 · Double degree · 2025–2026",
+
+          keywords:
+            "cy tech cytech master m2 double diplôme degree 2025 2026 school",
+
+          searchOnly:
+            true,
+
+          icon:
+            Building2,
+
+          action: () =>
+            goToChapter(
+              "cytech"
+            ),
+        },
+
+        {
+          id:
+            "esb",
+
+          label:
+            "ESB",
+
+          description:
+            "Business Analytics · 2024–2025",
+
+          keywords:
+            "esb business analytics master 2024 2025 education",
+
+          searchOnly:
+            true,
+
+          icon:
+            Building2,
+
+          action: () =>
+            goToChapter(
+              "esb"
+            ),
+        },
+
+        {
+          id:
+            "power-bi",
+
+          label:
+            "Power BI",
+
+          description:
+            isFr
+              ? "Voir mon expertise BI"
+              : "See my BI expertise",
+
+          keywords:
+            "power bi dax power query dashboard dashboards business intelligence reporting",
+
+          searchOnly:
+            true,
+
+          icon:
+            Sparkles,
+
+          action: () =>
+            goToHash(
+              "expertise"
+            ),
+        },
+
+        {
+          id:
+            "sql-python",
+
+          label:
+            "SQL · Python · Excel",
+
+          description:
+            isFr
+              ? "Analyse, automatisation et reporting"
+              : "Analysis, automation and reporting",
+
+          keywords:
+            "sql python excel vba mysql analysis automation reporting data",
+
+          searchOnly:
+            true,
+
+          icon:
+            Sparkles,
+
+          action: () =>
+            goToHash(
+              "expertise"
+            ),
+        },
+
+        {
+          id:
+            "tableau-talend-salesforce",
+
+          label:
+            "Tableau · Talend · Salesforce",
+
+          description:
+            isFr
+              ? "Voir mes outils complémentaires"
+              : "See my supporting tools",
+
+          keywords:
+            "tableau talend salesforce sharepoint power automate jira dbt tools",
+
+          searchOnly:
+            true,
+
+          icon:
+            Sparkles,
+
+          action: () =>
+            goToHash(
+              "expertise"
+            ),
+        },
+
+        {
+          id:
+            "ats-checklist",
+
+          label:
+            isFr
+              ? "Checklist ATS"
+              : "ATS checklist",
+
+          description:
+            isFr
+              ? "10 contrôles avant d'envoyer un CV"
+              : "10 checks before sending a CV",
+
+          keywords:
+            "ats checklist scanner cv guide parsing score checks",
+
+          searchOnly:
+            true,
+
+          icon:
+            BookOpenText,
+
+          action: () =>
+            goToGuideHash(
+              "ats-checklist"
+            ),
+        },
+
+        {
+          id:
+            "cv-before-after",
+
+          label:
+            isFr
+              ? "CV avant / après"
+              : "CV before / after",
+
+          description:
+            isFr
+              ? "Photoshop / Canva → structure LaTeX"
+              : "Photoshop / Canva → LaTeX structure",
+
+          keywords:
+            "before after avant après photoshop canva latex cv comparison",
+
+          searchOnly:
+            true,
+
+          icon:
+            BookOpenText,
+
+          action: () =>
+            goToGuideHash(
+              "cv-before-after"
+            ),
+        },
       ],
       [
         isFr,
+        language,
         pathname,
       ]
     );
@@ -411,8 +900,14 @@ export default function CommandPalette({
             .trim()
             .toLowerCase();
 
-        if (!normalized)
-          return commands;
+        if (!normalized) {
+          return commands.filter(
+            (
+              command
+            ) =>
+              !command.searchOnly
+          );
+        }
 
         return commands.filter(
           (
@@ -518,7 +1013,6 @@ export default function CommandPalette({
       "Escape"
     ) {
       setOpen(false);
-
       return;
     }
 
@@ -580,12 +1074,303 @@ export default function CommandPalette({
     }
   }
 
+  const paletteModal = (
+    <AnimatePresence>
+
+      {open && (
+        <motion.div
+          className="fixed inset-0 z-[9999] flex items-start justify-center bg-[#070b12]/72 px-4 pt-[13vh] backdrop-blur-md"
+          initial={{
+            opacity:
+              0,
+          }}
+          animate={{
+            opacity:
+              1,
+          }}
+          exit={{
+            opacity:
+              0,
+          }}
+          onMouseDown={
+            (
+              event
+            ) => {
+              if (
+                event.target ===
+                event.currentTarget
+              ) {
+                setOpen(
+                  false
+                );
+              }
+            }
+          }
+        >
+
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label={
+              isFr
+                ? "Accès rapide"
+                : "Quick access"
+            }
+            onKeyDown={
+              handleDialogKeyDown
+            }
+            initial={{
+              opacity:
+                0,
+
+              y:
+                -18,
+
+              scale:
+                0.985,
+            }}
+            animate={{
+              opacity:
+                1,
+
+              y:
+                0,
+
+              scale:
+                1,
+            }}
+            exit={{
+              opacity:
+                0,
+
+              y:
+                -10,
+
+              scale:
+                0.99,
+            }}
+            transition={{
+              duration:
+                0.22,
+
+              ease: [
+                0.22,
+                1,
+                0.36,
+                1,
+              ],
+            }}
+            className="w-full max-w-[680px] overflow-hidden rounded-[26px] border border-white/10 bg-[#111827] shadow-[0_35px_120px_rgba(0,0,0,0.55)]"
+          >
+
+            <div className="flex items-center gap-3 border-b border-white/10 px-5 py-4">
+
+              <Search
+                size={18}
+                strokeWidth={
+                  1.7
+                }
+                className="shrink-0 text-[#d2ad73]"
+              />
+
+              <input
+                ref={
+                  inputRef
+                }
+                value={
+                  query
+                }
+                onChange={
+                  (
+                    event
+                  ) => {
+                    setQuery(
+                      event
+                        .target
+                        .value
+                    );
+
+                    setActiveIndex(
+                      0
+                    );
+                  }
+                }
+                placeholder={
+                  isFr
+                    ? "Rechercher une page, une expérience, un outil..."
+                    : "Search a page, experience, tool..."
+                }
+                className="min-w-0 flex-1 bg-transparent text-[15px] text-white outline-none placeholder:text-white/35"
+              />
+
+              <button
+                type="button"
+                onClick={() =>
+                  setOpen(
+                    false
+                  )
+                }
+                className="flex h-8 w-8 items-center justify-center rounded-full text-white/45 transition hover:bg-white/10 hover:text-white"
+              >
+                <X
+                  size={16}
+                />
+              </button>
+
+            </div>
+
+            {query.trim() && (
+              <div className="border-b border-white/[0.06] px-5 py-2 text-[9px] font-medium uppercase tracking-[0.15em] text-white/25">
+
+                {isFr
+                  ? `${filteredCommands.length} résultat${
+                      filteredCommands.length ===
+                      1
+                        ? ""
+                        : "s"
+                    }`
+                  : `${filteredCommands.length} result${
+                      filteredCommands.length ===
+                      1
+                        ? ""
+                        : "s"
+                    }`}
+
+              </div>
+            )}
+
+            <div className="max-h-[55vh] overflow-y-auto p-2">
+
+              {filteredCommands.length >
+              0 ? (
+
+                filteredCommands.map(
+                  (
+                    command,
+                    index
+                  ) => {
+                    const Icon =
+                      command.icon;
+
+                    const active =
+                      index ===
+                      activeIndex;
+
+                    return (
+                      <button
+                        key={
+                          command.id
+                        }
+                        type="button"
+                        onMouseEnter={() =>
+                          setActiveIndex(
+                            index
+                          )
+                        }
+                        onClick={
+                          command.action
+                        }
+                        className={`flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 text-left transition ${
+                          active
+                            ? "bg-[#bc965d]/14 text-white"
+                            : "text-white/72 hover:bg-white/[0.05]"
+                        }`}
+                      >
+
+                        <span
+                          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${
+                            active
+                              ? "border-[#bc965d]/35 bg-[#bc965d]/12 text-[#d2ad73]"
+                              : "border-white/10 bg-white/[0.035] text-white/50"
+                          }`}
+                        >
+                          <Icon
+                            size={
+                              17
+                            }
+                            strokeWidth={
+                              1.7
+                            }
+                          />
+                        </span>
+
+                        <span className="min-w-0 flex-1">
+
+                          <span className="block text-sm font-semibold">
+                            {
+                              command.label
+                            }
+                          </span>
+
+                          <span className="mt-0.5 block truncate text-xs text-white/40">
+                            {
+                              command.description
+                            }
+                          </span>
+
+                        </span>
+
+                        <ArrowUpRight
+                          size={15}
+                          strokeWidth={
+                            1.7
+                          }
+                          className={
+                            active
+                              ? "text-[#d2ad73]"
+                              : "text-white/25"
+                          }
+                        />
+
+                      </button>
+                    );
+                  }
+                )
+
+              ) : (
+
+                <div className="px-5 py-12 text-center text-sm text-white/40">
+
+                  {isFr
+                    ? "Aucun résultat"
+                    : "No result"}
+
+                </div>
+
+              )}
+
+            </div>
+
+            <div className="flex items-center justify-between border-t border-white/10 px-5 py-3 text-[10px] uppercase tracking-[0.14em] text-white/30">
+
+              <span>
+                {isFr
+                  ? "↑ ↓ naviguer · Entrée ouvrir"
+                  : "↑ ↓ navigate · Enter open"}
+              </span>
+
+              <span>
+                ESC
+              </span>
+
+            </div>
+
+          </motion.div>
+
+        </motion.div>
+      )}
+
+    </AnimatePresence>
+  );
+
   return (
     <>
       <button
         type="button"
         onClick={() =>
-          setOpen(true)
+          setOpen(
+            true
+          )
         }
         aria-label={
           isFr
@@ -594,269 +1379,26 @@ export default function CommandPalette({
         }
         className="hidden h-10 items-center gap-2 rounded-full border border-white/10 bg-white/[0.045] px-3 text-[11px] font-medium text-white/65 transition hover:border-white/20 hover:bg-white/[0.08] hover:text-white 2xl:flex"
       >
+
         <Search
           size={14}
-          strokeWidth={1.8}
+          strokeWidth={
+            1.8
+          }
         />
 
         <span>
           Ctrl K
         </span>
+
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            className="fixed inset-0 z-[120] flex items-start justify-center bg-[#070b12]/72 px-4 pt-[13vh] backdrop-blur-md"
-            initial={{
-              opacity:
-                0,
-            }}
-            animate={{
-              opacity:
-                1,
-            }}
-            exit={{
-              opacity:
-                0,
-            }}
-            onMouseDown={
-              (
-                event
-              ) => {
-                if (
-                  event.target ===
-                  event.currentTarget
-                ) {
-                  setOpen(
-                    false
-                  );
-                }
-              }
-            }
-          >
-            <motion.div
-              role="dialog"
-              aria-modal="true"
-              aria-label={
-                isFr
-                  ? "Accès rapide"
-                  : "Quick access"
-              }
-              onKeyDown={
-                handleDialogKeyDown
-              }
-              initial={{
-                opacity:
-                  0,
-
-                y:
-                  -18,
-
-                scale:
-                  0.985,
-              }}
-              animate={{
-                opacity:
-                  1,
-
-                y:
-                  0,
-
-                scale:
-                  1,
-              }}
-              exit={{
-                opacity:
-                  0,
-
-                y:
-                  -10,
-
-                scale:
-                  0.99,
-              }}
-              transition={{
-                duration:
-                  0.22,
-
-                ease: [
-                  0.22,
-                  1,
-                  0.36,
-                  1,
-                ],
-              }}
-              className="w-full max-w-[680px] overflow-hidden rounded-[26px] border border-white/10 bg-[#111827] shadow-[0_35px_120px_rgba(0,0,0,0.45)]"
-            >
-              <div className="flex items-center gap-3 border-b border-white/10 px-5 py-4">
-                <Search
-                  size={18}
-                  strokeWidth={
-                    1.7
-                  }
-                  className="shrink-0 text-[#d2ad73]"
-                />
-
-                <input
-                  ref={
-                    inputRef
-                  }
-                  value={
-                    query
-                  }
-                  onChange={
-                    (
-                      event
-                    ) => {
-                      setQuery(
-                        event
-                          .target
-                          .value
-                      );
-
-                      setActiveIndex(
-                        0
-                      );
-                    }
-                  }
-                  placeholder={
-                    isFr
-                      ? "Où voulez-vous aller ?"
-                      : "Where do you want to go?"
-                  }
-                  className="min-w-0 flex-1 bg-transparent text-[15px] text-white outline-none placeholder:text-white/35"
-                />
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setOpen(
-                      false
-                    )
-                  }
-                  aria-label={
-                    isFr
-                      ? "Fermer"
-                      : "Close"
-                  }
-                  className="flex h-8 w-8 items-center justify-center rounded-full text-white/45 transition hover:bg-white/10 hover:text-white"
-                >
-                  <X
-                    size={
-                      16
-                    }
-                  />
-                </button>
-              </div>
-
-              <div className="max-h-[55vh] overflow-y-auto p-2">
-                {filteredCommands.length >
-                0 ? (
-                  filteredCommands.map(
-                    (
-                      command,
-                      index
-                    ) => {
-                      const Icon =
-                        command.icon;
-
-                      const active =
-                        index ===
-                        activeIndex;
-
-                      return (
-                        <button
-                          key={
-                            command.id
-                          }
-                          type="button"
-                          onMouseEnter={() =>
-                            setActiveIndex(
-                              index
-                            )
-                          }
-                          onClick={
-                            command.action
-                          }
-                          className={`flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 text-left transition ${
-                            active
-                              ? "bg-[#bc965d]/14 text-white"
-                              : "text-white/72 hover:bg-white/[0.05]"
-                          }`}
-                        >
-                          <span
-                            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${
-                              active
-                                ? "border-[#bc965d]/35 bg-[#bc965d]/12 text-[#d2ad73]"
-                                : "border-white/10 bg-white/[0.035] text-white/50"
-                            }`}
-                          >
-                            <Icon
-                              size={
-                                17
-                              }
-                              strokeWidth={
-                                1.7
-                              }
-                            />
-                          </span>
-
-                          <span className="min-w-0 flex-1">
-                            <span className="block text-sm font-semibold">
-                              {
-                                command.label
-                              }
-                            </span>
-
-                            <span className="mt-0.5 block truncate text-xs text-white/40">
-                              {
-                                command.description
-                              }
-                            </span>
-                          </span>
-
-                          <ArrowUpRight
-                            size={
-                              15
-                            }
-                            strokeWidth={
-                              1.7
-                            }
-                            className={
-                              active
-                                ? "text-[#d2ad73]"
-                                : "text-white/25"
-                            }
-                          />
-                        </button>
-                      );
-                    }
-                  )
-                ) : (
-                  <div className="px-5 py-12 text-center text-sm text-white/40">
-                    {isFr
-                      ? "Aucun résultat"
-                      : "No result"}
-                  </div>
-                )}
-              </div>
-
-              <div className="flex items-center justify-between border-t border-white/10 px-5 py-3 text-[10px] uppercase tracking-[0.14em] text-white/30">
-                <span>
-                  {isFr
-                    ? "↑ ↓ naviguer · Entrée ouvrir"
-                    : "↑ ↓ navigate · Enter open"}
-                </span>
-
-                <span>
-                  ESC
-                </span>
-              </div>
-            </motion.div>
-          </motion.div>
+      {mounted &&
+        createPortal(
+          paletteModal,
+          document.body
         )}
-      </AnimatePresence>
+
     </>
   );
 }

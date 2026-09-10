@@ -3,6 +3,9 @@ import type {
 } from "next";
 
 import "./globals.css";
+import "./effects.css";
+
+import SiteEffects from "@/components/Effects/SiteEffects";
 
 function getSiteUrl() {
   if (
@@ -211,7 +214,10 @@ export default function RootLayout({
     React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
+    <html
+      lang="fr"
+      suppressHydrationWarning
+    >
       <body>
 
         <script
@@ -223,6 +229,8 @@ export default function RootLayout({
               ),
           }}
         />
+
+        <SiteEffects />
 
         {
           children

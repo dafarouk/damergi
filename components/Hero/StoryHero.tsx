@@ -1075,18 +1075,27 @@ export default function StoryHero({
 
               </div>
 
-              <Image
-                src="/images/portrait/portrait-farouk-3.png"
-                alt="Ahmed-Farouk DAMERGI"
-                width={
-                  540
-                }
-                height={
-                  800
-                }
-                priority
-                className="absolute bottom-0 left-1/2 z-10 max-h-[390px] w-auto -translate-x-1/2 object-contain drop-shadow-[0_25px_35px_rgba(15,23,42,0.18)] sm:max-h-[490px]"
-              />
+              <div
+  className="relative select-none"
+  onContextMenu={(event) =>
+    event.preventDefault()
+  }
+>
+  <Image
+    src="/images/portrait/portrait-farouk-3.png"
+    alt="Ahmed-Farouk DAMERGI"
+    width={540}
+    height={800}
+    priority
+    draggable={false}
+    className="pointer-events-none max-h-[650px] w-auto select-none object-contain drop-shadow-[0_30px_38px_rgba(15,23,42,0.18)]"
+  />
+
+  <div
+    className="absolute inset-0 z-20"
+    aria-hidden="true"
+  />
+</div>
 
             </motion.div>
 

@@ -980,8 +980,8 @@ export default function CVGuidePage() {
               />
 
               {isFr
-                ? "Guide pratique · basé sur mon expérience"
-                : "Practical guide · based on my experience"}
+                ? "Guide pratique pour créer votre CV · basé sur mon expérience"
+                : "Practical guide to create your CV · based on my experience"}
 
             </div>
 
