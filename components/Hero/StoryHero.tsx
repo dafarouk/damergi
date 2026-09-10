@@ -20,6 +20,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type CSSProperties,
 } from "react";
 
 import {
@@ -80,6 +81,15 @@ export default function StoryHero({
     setCvOpen,
   ] = useState(false);
 
+  /*
+    PHONE ONLY:
+    Journey starts collapsed below 768px.
+  */
+  const [
+    mobileJourneyOpen,
+    setMobileJourneyOpen,
+  ] = useState(false);
+
   const timeline =
     timelineByLanguage[
       language
@@ -90,47 +100,86 @@ export default function StoryHero({
       ? {
           journey:
             "Mon parcours",
+
           learnMore:
             "En savoir plus",
+
           scroll:
             "Faites défiler mon parcours",
+
+          showJourney:
+            "Afficher mon parcours",
+
+          hideJourney:
+            "Masquer mon parcours",
+
           connected:
             "Restons connectés",
+
           contacts:
             "Mes contacts",
+
           emailCopied:
             "Email copié",
+
           phoneCopied:
             "Téléphone copié",
-          email: "Email",
+
+          email:
+            "Email",
+
           phone:
             "Téléphone",
-          cv: "Voir mon CV",
+
+          cv:
+            "Voir mon CV",
+
           goTo:
             "Aller à",
+
           mobileIntro:
             "Mon parcours",
         }
       : {
           journey:
             "My journey",
+
           learnMore:
             "Learn more",
+
           scroll:
             "Scroll through my journey",
+
+          showJourney:
+            "Show my journey",
+
+          hideJourney:
+            "Hide my journey",
+
           connected:
             "Let's connect",
+
           contacts:
             "My contacts",
+
           emailCopied:
             "Email copied",
+
           phoneCopied:
             "Phone copied",
-          email: "Email",
-          phone: "Phone",
-          cv: "View my CV",
+
+          email:
+            "Email",
+
+          phone:
+            "Phone",
+
+          cv:
+            "View my CV",
+
           goTo:
             "Go to",
+
           mobileIntro:
             "My journey",
         };
@@ -154,10 +203,6 @@ export default function StoryHero({
         ): index is number =>
           index !== null
       );
-
-  /* =========================================
-     DESKTOP INTERNAL SCROLL
-  ========================================= */
 
   useEffect(() => {
     const container =
@@ -239,10 +284,6 @@ export default function StoryHero({
     timeline.length,
   ]);
 
-  /* =========================================
-     NAVIGATE MAIN STORY
-  ========================================= */
-
   function goToStory(
     index: number
   ) {
@@ -253,12 +294,55 @@ export default function StoryHero({
       return;
     }
 
-    const mobile =
+    const mobileOrTablet =
       window.matchMedia(
         "(max-width: 1023px)"
       ).matches;
 
-    if (mobile) {
+    const phone =
+      window.matchMedia(
+        "(max-width: 767px)"
+      ).matches;
+
+    if (
+      mobileOrTablet
+    ) {
+      if (
+        phone &&
+        !mobileJourneyOpen
+      ) {
+        setMobileJourneyOpen(
+          true
+        );
+
+        window.setTimeout(
+          () => {
+            const target =
+              mobileStoryItemsRef.current[
+                index
+              ];
+
+            if (!target)
+              return;
+
+            target.scrollIntoView({
+              behavior:
+                "smooth",
+
+              block:
+                "center",
+            });
+
+            setCurrentIndex(
+              index
+            );
+          },
+          180
+        );
+
+        return;
+      }
+
       const target =
         mobileStoryItemsRef.current[
           index
@@ -270,7 +354,9 @@ export default function StoryHero({
       target.scrollIntoView({
         behavior:
           "smooth",
-        block: "center",
+
+        block:
+          "center",
       });
 
       setCurrentIndex(
@@ -299,27 +385,28 @@ export default function StoryHero({
       target.offsetTop -
       Math.max(
         0,
-        (container.clientHeight -
-          target.offsetHeight) /
+        (
+          container.clientHeight -
+          target.offsetHeight
+        ) /
           2
       );
 
     container.scrollTo({
-      top: Math.max(
-        0,
-        desiredTop
-      ),
-      behavior: "smooth",
+      top:
+        Math.max(
+          0,
+          desiredTop
+        ),
+
+      behavior:
+        "smooth",
     });
 
     setCurrentIndex(
       index
     );
   }
-
-  /* =========================================
-     DETAIL MODAL
-  ========================================= */
 
   function openDetails(
     index: number
@@ -441,10 +528,6 @@ export default function StoryHero({
     );
   }
 
-  /* =========================================
-     COPY CONTACT
-  ========================================= */
-
   async function copyValue(
     label: string,
     value: string
@@ -475,7 +558,9 @@ export default function StoryHero({
       textarea.remove();
     }
 
-    setCopied(label);
+    setCopied(
+      label
+    );
 
     window.setTimeout(
       () => {
@@ -491,14 +576,20 @@ export default function StoryHero({
     timeline.length <=
     1
       ? 0
-      : (currentIndex /
-          (timeline.length -
-            1)) *
+      : (
+          currentIndex /
+          (
+            timeline.length -
+            1
+          )
+        ) *
         100;
 
   const progressPixelAdjustment =
-    (timelinePercent /
-      100) *
+    (
+      timelinePercent /
+      100
+    ) *
     64;
 
   const selectedDetailPosition =
@@ -516,18 +607,70 @@ export default function StoryHero({
         className="hero-world relative overflow-hidden pb-[42px] text-[var(--ink)] lg:min-h-[calc(100vh-7rem)] lg:pb-[54px]"
       >
 
-        {/* BACKGROUND */}
+        {/* ===================================================
+            BACKGROUND
+        =================================================== */}
+
         <div className="pattern-world pointer-events-none absolute inset-0 overflow-hidden">
+
           <div className="pattern-layer">
 
-            <PatternLogo className="pattern-logo-1" />
-            <PatternLogo className="pattern-logo-2" />
-            <PatternLogo className="pattern-logo-3" />
-            <PatternLogo className="pattern-logo-4" />
-            <PatternLogo className="pattern-logo-5" />
-            <PatternLogo className="pattern-logo-6" />
+            {Array.from({
+              /*
+                6 columns × 30 rows.
+
+                This gives us enough AFD rows
+                for the ENTIRE expanded mobile
+                journey.
+
+                The coordinates below are exact
+                multiples of the square grid.
+              */
+              length:
+                180,
+            }).map(
+              (
+                _,
+                index
+              ) => {
+                const column =
+                  index % 6;
+
+                const row =
+                  Math.floor(
+                    index / 6
+                  );
+
+                const style: CSSProperties =
+                  {
+                    left: `calc(var(--pattern-grid-size) * ${
+                      2 +
+                      column *
+                        4
+                    })`,
+
+                    top: `calc(var(--pattern-grid-size) * ${
+                      2 +
+                      row *
+                        4
+                    })`,
+                  };
+
+                return (
+                  <PatternLogo
+                    key={
+                      index
+                    }
+                    style={
+                      style
+                    }
+                  />
+                );
+              }
+            )}
 
           </div>
+
         </div>
 
         {/* ===================================================
@@ -537,6 +680,7 @@ export default function StoryHero({
         <div className="relative z-10 mx-auto hidden max-w-[1800px] grid-cols-[1.15fr_0.78fr_0.7fr] items-start gap-8 px-14 pb-0 pt-2 lg:grid">
 
           {/* STORY */}
+
           <div className="relative flex h-[690px] max-h-[calc(100vh-11rem)] min-h-[560px] items-start">
 
             <div className="story-surface relative h-full w-full">
@@ -587,6 +731,7 @@ export default function StoryHero({
                         }}
                         className="story-chapter flex min-h-[520px] items-center pb-10 first:pt-20"
                       >
+
                         <div className="max-w-[650px]">
 
                           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-[var(--gold)]">
@@ -619,12 +764,14 @@ export default function StoryHero({
                             viewport={{
                               once:
                                 false,
+
                               amount:
                                 0.8,
                             }}
                             transition={{
                               duration:
                                 0.8,
+
                               ease: [
                                 0.22,
                                 1,
@@ -692,6 +839,7 @@ export default function StoryHero({
                           )}
 
                         </div>
+
                       </section>
                     );
                   }
@@ -700,6 +848,7 @@ export default function StoryHero({
               </div>
 
               {/* CLICKABLE TIMELINE */}
+
               <div className="absolute bottom-16 right-1 top-16 z-20 w-[72px]">
 
                 <span className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 text-[9px] font-semibold tracking-[0.12em] text-[var(--muted)]">
@@ -732,8 +881,10 @@ export default function StoryHero({
                       1
                         ? 0
                         : index /
-                          (timeline.length -
-                            1);
+                          (
+                            timeline.length -
+                            1
+                          );
 
                     const percent =
                       progress *
@@ -765,6 +916,7 @@ export default function StoryHero({
                           top: `calc(32px + ${percent}% - ${pixelAdjustment}px)`,
                         }}
                       >
+
                         <span
                           className={`block rounded-full border transition-all duration-200 ${
                             isActive
@@ -791,25 +943,38 @@ export default function StoryHero({
               </div>
 
             </div>
+
           </div>
 
           {/* PORTRAIT */}
+
           <DesktopPortrait />
 
           {/* CONTACTS */}
+
           <motion.aside
             id="contact-panel"
             initial={{
-              opacity: 0,
-              x: 30,
+              opacity:
+                0,
+
+              x:
+                30,
             }}
             animate={{
-              opacity: 1,
-              x: 0,
+              opacity:
+                1,
+
+              x:
+                0,
             }}
             transition={{
-              delay: 0.5,
-              duration: 0.8,
+              delay:
+                0.5,
+
+              duration:
+                0.8,
+
               ease: [
                 0.22,
                 1,
@@ -847,21 +1012,29 @@ export default function StoryHero({
 
         <div className="relative z-10 lg:hidden">
 
-          {/* MOBILE PORTRAIT INTRO */}
+          {/* PORTRAIT */}
+
           <section className="relative overflow-hidden px-5 pb-10 pt-5 sm:px-8">
 
             <motion.div
               initial={{
-                opacity: 0,
-                y: 30,
+                opacity:
+                  0,
+
+                y:
+                  30,
               }}
               animate={{
-                opacity: 1,
-                y: 0,
+                opacity:
+                  1,
+
+                y:
+                  0,
               }}
               transition={{
                 duration:
                   0.9,
+
                 ease: [
                   0.22,
                   1,
@@ -877,19 +1050,27 @@ export default function StoryHero({
                 <div className="aura-soft-glow" />
 
                 <div className="aura-ring aura-ring-outer" />
+
                 <div className="aura-ring aura-ring-middle" />
+
                 <div className="aura-ring aura-ring-inner" />
 
                 <div className="aura-arc aura-arc-one" />
+
                 <div className="aura-arc aura-arc-two" />
+
                 <div className="aura-arc aura-arc-three" />
 
                 <span className="aura-node aura-node-1" />
+
                 <span className="aura-node aura-node-2" />
+
                 <span className="aura-node aura-node-3" />
+
                 <span className="aura-node aura-node-4" />
 
                 <div className="aura-crosshair aura-crosshair-horizontal" />
+
                 <div className="aura-crosshair aura-crosshair-vertical" />
 
               </div>
@@ -897,15 +1078,21 @@ export default function StoryHero({
               <Image
                 src="/images/portrait/portrait-farouk-3.png"
                 alt="Ahmed-Farouk DAMERGI"
-                width={540}
-                height={800}
+                width={
+                  540
+                }
+                height={
+                  800
+                }
                 priority
                 className="absolute bottom-0 left-1/2 z-10 max-h-[390px] w-auto -translate-x-1/2 object-contain drop-shadow-[0_25px_35px_rgba(15,23,42,0.18)] sm:max-h-[490px]"
               />
 
             </motion.div>
 
-            <div className="relative mx-auto mt-6 max-w-xl text-center">
+            {/* WHO AM I */}
+
+            <div className="relative mx-auto mt-8 max-w-xl text-center sm:mt-7">
 
               <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[var(--gold)]">
                 {
@@ -934,6 +1121,51 @@ export default function StoryHero({
                 }
               </p>
 
+              {/* PHONE ONLY */}
+
+              <button
+                type="button"
+                aria-expanded={
+                  mobileJourneyOpen
+                }
+                aria-controls="mobile-journey"
+                onClick={() =>
+                  setMobileJourneyOpen(
+                    (
+                      current
+                    ) =>
+                      !current
+                  )
+                }
+                className={`mx-auto mt-8 flex items-center gap-3 rounded-full border px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.13em] backdrop-blur-md transition-all duration-300 md:hidden ${
+                  mobileJourneyOpen
+                    ? "border-[var(--gold)] bg-[var(--gold)] text-white shadow-[0_10px_35px_var(--gold-halo)]"
+                    : "border-[var(--gold-soft)] bg-[var(--surface)]/75 text-[var(--ink)]"
+                }`}
+              >
+
+                <ChevronDown
+                  size={
+                    18
+                  }
+                  strokeWidth={
+                    1.8
+                  }
+                  className={`transition-transform duration-300 ${
+                    mobileJourneyOpen
+                      ? "rotate-180 text-white"
+                      : "text-[var(--gold)]"
+                  }`}
+                />
+
+                {mobileJourneyOpen
+                  ? labels.hideJourney
+                  : labels.showJourney}
+
+              </button>
+
+              {/* TABLET */}
+
               <button
                 type="button"
                 onClick={() =>
@@ -941,11 +1173,15 @@ export default function StoryHero({
                     1
                   )
                 }
-                className="mx-auto mt-7 flex items-center gap-3 rounded-full border border-[var(--gold-soft)] bg-[var(--surface)]/75 px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.13em] text-[var(--ink)] backdrop-blur-md"
+                className="mx-auto mt-8 hidden items-center gap-3 rounded-full border border-[var(--gold-soft)] bg-[var(--surface)]/75 px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.13em] text-[var(--ink)] backdrop-blur-md md:flex lg:hidden"
               >
+
                 <ChevronDown
                   size={
-                    17
+                    18
+                  }
+                  strokeWidth={
+                    1.8
                   }
                   className="scroll-indicator text-[var(--gold)]"
                 />
@@ -953,14 +1189,23 @@ export default function StoryHero({
                 {
                   labels.scroll
                 }
+
               </button>
 
             </div>
 
           </section>
 
-          {/* MOBILE TIMELINE */}
-          <section className="px-5 pb-12 pt-6 sm:px-8">
+          {/* JOURNEY */}
+
+          <section
+            id="mobile-journey"
+            className={`px-5 pb-12 pt-6 sm:px-8 ${
+              mobileJourneyOpen
+                ? "block"
+                : "hidden"
+            } md:block`}
+          >
 
             <div className="mx-auto max-w-[700px]">
 
@@ -1063,6 +1308,7 @@ export default function StoryHero({
                                     15
                                   }
                                 />
+
                               </button>
                             )}
 
@@ -1075,14 +1321,57 @@ export default function StoryHero({
 
               </div>
 
+              {/* PHONE ONLY BOTTOM HIDE */}
+
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileJourneyOpen(
+                    false
+                  );
+
+                  window.setTimeout(
+                    () => {
+                      document
+                        .getElementById(
+                          "home"
+                        )
+                        ?.scrollIntoView({
+                          behavior:
+                            "smooth",
+
+                          block:
+                            "start",
+                        });
+                    },
+                    50
+                  );
+                }}
+                className="mx-auto mt-5 flex items-center gap-2 rounded-full border border-[var(--gold-soft)] bg-[var(--surface)]/75 px-5 py-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--gold-dark)] backdrop-blur-md md:hidden"
+              >
+
+                <ChevronDown
+                  size={
+                    16
+                  }
+                  className="rotate-180"
+                />
+
+                {
+                  labels.hideJourney
+                }
+
+              </button>
+
             </div>
 
           </section>
 
-          {/* MOBILE CONTACT */}
+          {/* CONTACT */}
+
           <section
             id="mobile-contact-panel"
-            className="contact-panel mx-5 mb-20 sm:mx-8"
+            className="contact-panel mx-5 mb-20 mt-8 sm:mx-8"
           >
 
             <ContactContent
@@ -1109,11 +1398,13 @@ export default function StoryHero({
       </section>
 
       {/* TICKER */}
+
       <div className="fixed bottom-0 left-0 z-40 h-[42px] w-full overflow-hidden border-t border-white/10 bg-[#111827]/97 text-white backdrop-blur-xl lg:h-[54px]">
 
         <div className="ticker-track flex h-full w-max items-center whitespace-nowrap text-[9px] font-medium uppercase tracking-[0.2em] text-white/65 lg:text-[11px] lg:tracking-[0.22em]">
 
           <TickerContent />
+
           <TickerContent />
 
         </div>
@@ -1121,6 +1412,7 @@ export default function StoryHero({
       </div>
 
       {/* DETAIL MODAL */}
+
       <StoryDetailModal
         item={
           selectedIndex ===
@@ -1170,6 +1462,7 @@ export default function StoryHero({
       />
 
       {/* CV */}
+
       <CVModal
         open={
           cvOpen
@@ -1183,6 +1476,7 @@ export default function StoryHero({
           )
         }
       />
+
     </>
   );
 }
@@ -1200,37 +1494,59 @@ function DesktopPortrait() {
         <div className="aura-soft-glow" />
 
         <div className="aura-ring aura-ring-outer" />
+
         <div className="aura-ring aura-ring-middle" />
+
         <div className="aura-ring aura-ring-inner" />
 
         <div className="aura-arc aura-arc-one" />
+
         <div className="aura-arc aura-arc-two" />
+
         <div className="aura-arc aura-arc-three" />
 
         <span className="aura-node aura-node-1" />
+
         <span className="aura-node aura-node-2" />
+
         <span className="aura-node aura-node-3" />
+
         <span className="aura-node aura-node-4" />
 
         <div className="aura-crosshair aura-crosshair-horizontal" />
+
         <div className="aura-crosshair aura-crosshair-vertical" />
 
       </div>
 
       <motion.div
         initial={{
-          opacity: 0,
-          y: 55,
-          scale: 0.96,
+          opacity:
+            0,
+
+          y:
+            55,
+
+          scale:
+            0.96,
         }}
         animate={{
-          opacity: 1,
-          y: 0,
-          scale: 1,
+          opacity:
+            1,
+
+          y:
+            0,
+
+          scale:
+            1,
         }}
         transition={{
-          delay: 0.12,
-          duration: 1,
+          delay:
+            0.12,
+
+          duration:
+            1,
+
           ease: [
             0.22,
             1,
@@ -1240,14 +1556,20 @@ function DesktopPortrait() {
         }}
         className="relative z-10 flex h-full items-end justify-center"
       >
+
         <Image
           src="/images/portrait/portrait-farouk-3.png"
           alt="Ahmed-Farouk DAMERGI"
-          width={540}
-          height={800}
+          width={
+            540
+          }
+          height={
+            800
+          }
           priority
-          className="max-h-[570px] w-auto object-contain drop-shadow-[0_30px_38px_rgba(15,23,42,0.18)]"
+          className="max-h-[560px] w-auto object-contain drop-shadow-[0_30px_38px_rgba(15,23,42,0.18)]"
         />
+
       </motion.div>
 
     </div>
@@ -1274,16 +1596,23 @@ function ContactContent({
   copyValue,
   openCV,
 }: {
-  labels: ContactLabels;
-  copied: string | null;
+  labels:
+    ContactLabels;
+
+  copied:
+    string | null;
+
   copyValue: (
     label: string,
     value: string
   ) => Promise<void>;
-  openCV: () => void;
+
+  openCV:
+    () => void;
 }) {
   return (
     <>
+
       <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[var(--gold)]">
         {
           labels.connected
@@ -1304,6 +1633,7 @@ function ContactContent({
           rel="noreferrer"
           className="contact-row group"
         >
+
           <LinkedInLogo />
 
           <span>
@@ -1311,9 +1641,12 @@ function ContactContent({
           </span>
 
           <ArrowUpRight
-            size={16}
+            size={
+              16
+            }
             className="ml-auto text-[var(--muted)] transition group-hover:-translate-y-1 group-hover:translate-x-1"
           />
+
         </a>
 
         <a
@@ -1322,6 +1655,7 @@ function ContactContent({
           rel="noreferrer"
           className="contact-row group"
         >
+
           <GitHubLogo />
 
           <span>
@@ -1329,9 +1663,12 @@ function ContactContent({
           </span>
 
           <ArrowUpRight
-            size={16}
+            size={
+              16
+            }
             className="ml-auto text-[var(--muted)] transition group-hover:-translate-y-1 group-hover:translate-x-1"
           />
+
         </a>
 
         <button
@@ -1344,8 +1681,11 @@ function ContactContent({
           }
           className="contact-row w-full"
         >
+
           <Mail
-            size={18}
+            size={
+              18
+            }
             strokeWidth={
               1.6
             }
@@ -1374,6 +1714,7 @@ function ContactContent({
               className="ml-auto text-[var(--muted)]"
             />
           )}
+
         </button>
 
         <button
@@ -1386,8 +1727,11 @@ function ContactContent({
           }
           className="contact-row w-full"
         >
+
           <Phone
-            size={18}
+            size={
+              18
+            }
             strokeWidth={
               1.6
             }
@@ -1416,6 +1760,7 @@ function ContactContent({
               className="ml-auto text-[var(--muted)]"
             />
           )}
+
         </button>
 
         <button
@@ -1425,8 +1770,11 @@ function ContactContent({
           }
           className="contact-row group w-full"
         >
+
           <FileText
-            size={18}
+            size={
+              18
+            }
             strokeWidth={
               1.6
             }
@@ -1439,44 +1787,62 @@ function ContactContent({
           </span>
 
           <ArrowUpRight
-            size={16}
+            size={
+              16
+            }
             className="ml-auto text-[var(--muted)] transition group-hover:-translate-y-1 group-hover:translate-x-1"
           />
+
         </button>
 
       </div>
+
     </>
   );
 }
 
 /* =========================================================
-   BACKGROUND LOGOS
+   BACKGROUND LOGO
 ========================================================= */
 
 function PatternLogo({
-  className,
+  style,
 }: {
-  className: string;
+  style:
+    CSSProperties;
 }) {
   return (
     <div
-      className={`pattern-logo ${className}`}
+      className="pattern-logo"
+      style={
+        style
+      }
     >
+
       <Image
         src="/images/branding/afd-gold.png"
         alt=""
-        width={110}
-        height={110}
+        width={
+          110
+        }
+        height={
+          110
+        }
         className="pattern-logo-light"
       />
 
       <Image
         src="/images/branding/afd-white.png"
         alt=""
-        width={110}
-        height={110}
+        width={
+          110
+        }
+        height={
+          110
+        }
         className="pattern-logo-dark"
       />
+
     </div>
   );
 }
@@ -1488,34 +1854,49 @@ function PatternLogo({
 function TickerContent() {
   return (
     <span className="pr-10">
+
       Data & Business Analyst
       <TickerDot />
+
       Power BI
       <TickerDot />
+
       SQL
       <TickerDot />
+
       Python
       <TickerDot />
+
       Business Intelligence
       <TickerDot />
+
       Performance Analytics
       <TickerDot />
+
       Automation
       <TickerDot />
+
       Excel
       <TickerDot />
+
       Data Quality
       <TickerDot />
+
       Reporting
       <TickerDot />
+
       Tableau
       <TickerDot />
+
       DAX
       <TickerDot />
+
       Power Query
       <TickerDot />
+
       VBA
       <TickerDot />
+
     </span>
   );
 }

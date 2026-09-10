@@ -39,8 +39,7 @@ export default function Navbar({
       );
 
     if (
-      savedTheme ===
-      "dark"
+      savedTheme === "dark"
     ) {
       document.documentElement.classList.add(
         "theme-dark"
@@ -54,9 +53,7 @@ export default function Navbar({
     const nextTheme =
       !darkMode;
 
-    setDarkMode(
-      nextTheme
-    );
+    setDarkMode(nextTheme);
 
     document.documentElement.classList.toggle(
       "theme-dark",
@@ -109,85 +106,81 @@ export default function Navbar({
       "contact-focus"
     );
 
-    requestAnimationFrame(
-      () => {
-        target.classList.add(
-          "contact-focus"
-        );
-      }
-    );
+    requestAnimationFrame(() => {
+      target.classList.add(
+        "contact-focus"
+      );
+    });
 
-    window.setTimeout(
-      () => {
-        target.classList.remove(
-          "contact-focus"
-        );
-      },
-      1400
-    );
+    window.setTimeout(() => {
+      target.classList.remove(
+        "contact-focus"
+      );
+    }, 1400);
   }
 
   return (
     <header className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-[#111827]/96 text-white backdrop-blur-xl">
 
-      <nav className="relative mx-auto flex h-20 max-w-[1800px] items-center justify-between px-4 sm:px-6 lg:h-28 lg:px-14">
+      <nav className="relative mx-auto flex h-20 max-w-[1800px] items-center px-3 sm:px-6 lg:h-28 lg:px-14">
 
-        {/* LEFT */}
+        {/* =====================================================
+            MOBILE LEFT — LANGUAGE
+        ===================================================== */}
+        <div className="flex items-center md:hidden">
+          <LanguageButton
+            language={language}
+            onClick={toggleLanguage}
+          />
+        </div>
+
+        {/* =====================================================
+            DESKTOP LEFT — PORTFOLIO
+        ===================================================== */}
         <div className="hidden md:block">
           <p className="text-[11px] font-light uppercase tracking-[0.22em] text-white/55">
             Portfolio · 2026
           </p>
         </div>
 
-        {/* CENTER BRAND */}
+        {/* =====================================================
+            CENTER BRAND
+        ===================================================== */}
         <a
           href="#home"
+          aria-label="Ahmed Farouk Damergi - Home"
           className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
         >
           <Image
             src="/images/branding/afd-white.png"
             alt="AFD"
-            width={72}
-            height={72}
+            width={110}
+            height={110}
             priority
-            className="h-[42px] w-auto object-contain lg:h-[56px]"
+            className="h-[62px] w-auto object-contain sm:h-[66px] lg:h-[64px]"
           />
 
-          <span className="-mt-1 hidden whitespace-nowrap text-[9px] font-light uppercase tracking-[0.3em] text-white/60 sm:block lg:text-[10px]">
+          <span className="-mt-2 hidden whitespace-nowrap text-[9px] font-light uppercase tracking-[0.3em] text-white/60 sm:block lg:text-[10px]">
             Ahmed Farouk Damergi
           </span>
         </a>
 
-        {/* RIGHT */}
-        <div className="ml-auto flex items-center gap-1 sm:gap-2">
+        {/* =====================================================
+            RIGHT
+        ===================================================== */}
+        <div className="ml-auto flex items-center gap-0.5 sm:gap-2">
 
-          <button
-            type="button"
-            onClick={
-              toggleLanguage
-            }
-            aria-label={
-              language === "fr"
-                ? "Switch to English"
-                : "Passer en français"
-            }
-            className="flex items-center gap-2 rounded-full px-2.5 py-2 text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
-          >
-            {language ===
-            "fr" ? (
-              <FranceFlag />
-            ) : (
-              <UKFlag />
-            )}
+          {/* DESKTOP LANGUAGE ONLY */}
+          <div className="hidden md:block">
+            <LanguageButton
+              language={language}
+              onClick={
+                toggleLanguage
+              }
+            />
+          </div>
 
-            <span className="hidden sm:inline">
-              {language ===
-              "fr"
-                ? "FR"
-                : "EN"}
-            </span>
-          </button>
-
+          {/* THEME */}
           <button
             type="button"
             onClick={
@@ -198,40 +191,79 @@ export default function Navbar({
                 ? "Changer le thème"
                 : "Change theme"
             }
-            className="flex h-9 w-9 items-center justify-center rounded-full text-white/80 transition hover:bg-white/10 hover:text-white lg:h-10 lg:w-10"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white/80 transition hover:bg-white/10 hover:text-white lg:h-10 lg:w-10"
           >
             {darkMode ? (
               <Sun
                 size={17}
-                strokeWidth={
-                  1.7
-                }
+                strokeWidth={1.7}
               />
             ) : (
               <Moon
                 size={17}
-                strokeWidth={
-                  1.7
-                }
+                strokeWidth={1.7}
               />
             )}
           </button>
 
+          {/* CONTACT */}
           <a
             href="#contact"
             onClick={
               goToContact
             }
-            className="ml-1 rounded-full border border-white/25 px-3.5 py-2 text-xs font-medium transition hover:bg-white hover:text-[#111827] sm:px-5 sm:py-2.5 sm:text-sm"
+            className="ml-0.5 shrink-0 rounded-full border border-white/25 px-3 py-2 text-[11px] font-medium transition hover:bg-white hover:text-[#111827] sm:ml-1 sm:px-5 sm:py-2.5 sm:text-sm"
           >
             Contact
           </a>
 
         </div>
+
       </nav>
     </header>
   );
 }
+
+/* =========================================================
+   LANGUAGE BUTTON
+========================================================= */
+
+function LanguageButton({
+  language,
+  onClick,
+}: {
+  language: Language;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={
+        language === "fr"
+          ? "Switch to English"
+          : "Passer en français"
+      }
+      className="flex items-center gap-1.5 rounded-full px-1.5 py-2 text-[11px] font-semibold uppercase tracking-[0.04em] text-white/85 transition hover:bg-white/10 hover:text-white sm:gap-2 sm:px-2.5 sm:text-sm"
+    >
+      <span>
+        {language === "fr"
+          ? "FR"
+          : "EN"}
+      </span>
+
+      {language === "fr" ? (
+        <FranceFlag />
+      ) : (
+        <UKFlag />
+      )}
+    </button>
+  );
+}
+
+/* =========================================================
+   FRANCE FLAG
+========================================================= */
 
 function FranceFlag() {
   return (
@@ -239,7 +271,7 @@ function FranceFlag() {
       width="22"
       height="15"
       viewBox="0 0 3 2"
-      className="overflow-hidden rounded-[2px] shadow-sm"
+      className="shrink-0 overflow-hidden rounded-[2px] shadow-sm"
       aria-hidden="true"
     >
       <rect
@@ -266,13 +298,17 @@ function FranceFlag() {
   );
 }
 
+/* =========================================================
+   UK FLAG
+========================================================= */
+
 function UKFlag() {
   return (
     <svg
       width="22"
       height="15"
       viewBox="0 0 60 30"
-      className="overflow-hidden rounded-[2px] shadow-sm"
+      className="shrink-0 overflow-hidden rounded-[2px] shadow-sm"
       aria-hidden="true"
     >
       <clipPath id="ukFlagClip">

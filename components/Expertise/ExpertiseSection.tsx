@@ -330,6 +330,7 @@ const content: Record<
               "VBA",
             ],
           },
+
           {
             label:
               "Web / UI",
@@ -341,6 +342,7 @@ const content: Record<
               "Next.js",
             ],
           },
+
           {
             label:
               "Outils de développement",
@@ -612,6 +614,7 @@ const content: Record<
               "VBA",
             ],
           },
+
           {
             label:
               "Web / UI",
@@ -623,6 +626,7 @@ const content: Record<
               "Next.js",
             ],
           },
+
           {
             label:
               "Development tools",
@@ -723,6 +727,7 @@ export default function ExpertiseSection({
     >
 
       {/* AMBIENT BACKGROUND */}
+
       <div
         aria-hidden="true"
         className="expertise-ambient pointer-events-none absolute inset-0"
@@ -731,7 +736,9 @@ export default function ExpertiseSection({
       <div className="relative z-10 mx-auto max-w-[1650px]">
 
         {/* HEADER */}
+
         <Reveal>
+
           <div className="max-w-[920px]">
 
             <div className="flex items-center gap-3">
@@ -739,32 +746,105 @@ export default function ExpertiseSection({
               <span className="h-[1px] w-10 bg-[var(--gold)]" />
 
               <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[var(--gold-dark)]">
+
                 {
                   copy.eyebrow
                 }
+
               </p>
 
             </div>
 
             <h2 className="mt-6 text-[42px] font-semibold leading-[1.02] tracking-[-0.045em] text-[var(--ink)] sm:text-5xl lg:text-[64px]">
+
               {
                 copy.title
               }
+
             </h2>
 
             <p className="mt-6 max-w-[800px] text-[16px] font-light leading-8 text-[var(--body-text)] lg:text-lg">
+
               {
                 copy.intro
               }
+
             </p>
 
           </div>
+
         </Reveal>
 
-        {/* MAIN GRID */}
+        {/* ===================================================
+            MAIN GRID
+
+            PHONE:
+            Mobile ecosystem appears FIRST.
+
+            TABLET/DESKTOP:
+            Mobile ecosystem wrapper does NOT exist visually,
+            therefore it cannot take a grid column.
+
+            Desktop layout remains:
+            CARDS LEFT / NETWORK RIGHT.
+        =================================================== */}
+
         <div className="mt-16 grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
 
-          {/* EXPERTISE CARDS */}
+          {/* ===============================================
+              PHONE ONLY:
+              COOL STAR ECOSYSTEM FIRST
+
+              IMPORTANT:
+              md:hidden is on the OUTER wrapper.
+              Therefore this wrapper takes ZERO grid space
+              from 768px upward.
+          =============================================== */}
+
+          <div className="md:hidden">
+
+            <Reveal>
+
+              <p className="mb-5 text-center text-[10px] font-semibold uppercase tracking-[0.26em] text-[var(--muted)]">
+
+                {
+                  copy.networkLabel
+                }
+
+              </p>
+
+              <MobileNetwork
+                items={
+                  copy.expertise
+                }
+                activeKey={
+                  activeKey
+                }
+                setActiveKey={
+                  setActiveKey
+                }
+                centerTitle={
+                  copy.centerTitle
+                }
+                centerSubtitle={
+                  copy.centerSubtitle
+                }
+              />
+
+            </Reveal>
+
+          </div>
+
+          {/* ===============================================
+              EXPERTISE CARDS
+
+              Desktop:
+              original LEFT column.
+
+              Phone:
+              comes AFTER ecosystem.
+          =============================================== */}
+
           <div className="grid gap-3">
 
             {copy.expertise.map(
@@ -781,6 +861,7 @@ export default function ExpertiseSection({
                     0.06
                   }
                 >
+
                   <TiltExpertiseCard
                     item={
                       item
@@ -798,22 +879,34 @@ export default function ExpertiseSection({
                       setCursor
                     }
                   />
+
                 </Reveal>
               )
             )}
 
           </div>
 
-          {/* DESKTOP LIVE NETWORK */}
+          {/* ===============================================
+              TABLET + DESKTOP NETWORK
+
+              This is the ORIGINAL desktop network.
+              Desktop remains RIGHT of the boxes.
+          =============================================== */}
+
           <Reveal
-            delay={0.12}
+            delay={
+              0.12
+            }
           >
+
             <div className="hidden md:block">
 
               <p className="mb-5 text-center text-[10px] font-semibold uppercase tracking-[0.26em] text-[var(--muted)]">
+
                 {
                   copy.networkLabel
                 }
+
               </p>
 
               <DesktopNetwork
@@ -835,60 +928,37 @@ export default function ExpertiseSection({
               />
 
             </div>
-          </Reveal>
 
-          {/* MOBILE NETWORK */}
-          <Reveal>
-            <div className="md:hidden">
-
-              <p className="mb-5 text-center text-[10px] font-semibold uppercase tracking-[0.26em] text-[var(--muted)]">
-                {
-                  copy.networkLabel
-                }
-              </p>
-
-              <MobileNetwork
-                items={
-                  copy.expertise
-                }
-                activeKey={
-                  activeKey
-                }
-                setActiveKey={
-                  setActiveKey
-                }
-                centerTitle={
-                  copy.centerTitle
-                }
-                centerSubtitle={
-                  copy.centerSubtitle
-                }
-              />
-
-            </div>
           </Reveal>
 
         </div>
 
         {/* METRICS */}
+
         <div className="mt-24 lg:mt-32">
 
           <Reveal>
+
             <div className="mb-8">
 
               <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[var(--gold-dark)]">
+
                 {
                   copy.resultsEyebrow
                 }
+
               </p>
 
               <h3 className="mt-3 text-2xl font-semibold tracking-[-0.025em] text-[var(--ink)] sm:text-3xl">
+
                 {
                   copy.resultsTitle
                 }
+
               </h3>
 
             </div>
+
           </Reveal>
 
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -907,9 +977,11 @@ export default function ExpertiseSection({
                     0.07
                   }
                 >
+
                   <MetricCard
                     {...metric}
                   />
+
                 </Reveal>
               )
             )}
@@ -921,6 +993,7 @@ export default function ExpertiseSection({
       </div>
 
       {/* CUSTOM DESKTOP CURSOR */}
+
       <motion.div
         aria-hidden="true"
         animate={{
@@ -941,14 +1014,17 @@ export default function ExpertiseSection({
         style={{
           left:
             cursor.x,
+
           top:
             cursor.y,
         }}
         className="expertise-cursor pointer-events-none fixed z-[600] hidden -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/15 bg-[#111827]/94 px-3 py-2 text-[8px] font-semibold uppercase tracking-[0.18em] text-white shadow-xl backdrop-blur-lg lg:block"
       >
+
         {
           copy.cursor
         }
+
       </motion.div>
 
     </section>
@@ -984,6 +1060,7 @@ function TiltExpertiseCard({
       {
         stiffness:
           220,
+
         damping:
           24,
       }
@@ -995,6 +1072,7 @@ function TiltExpertiseCard({
       {
         stiffness:
           220,
+
         damping:
           24,
       }
@@ -1007,14 +1085,18 @@ function TiltExpertiseCard({
       event.currentTarget.getBoundingClientRect();
 
     const relativeX =
-      (event.clientX -
-        rect.left) /
+      (
+        event.clientX -
+        rect.left
+      ) /
         rect.width -
       0.5;
 
     const relativeY =
-      (event.clientY -
-        rect.top) /
+      (
+        event.clientY -
+        rect.top
+      ) /
         rect.height -
       0.5;
 
@@ -1029,10 +1111,13 @@ function TiltExpertiseCard({
     );
 
     onCursor({
-      visible: true,
+      visible:
+        true,
+
       x:
         event.clientX +
         18,
+
       y:
         event.clientY +
         18,
@@ -1040,13 +1125,23 @@ function TiltExpertiseCard({
   }
 
   function reset() {
-    rotateX.set(0);
-    rotateY.set(0);
+    rotateX.set(
+      0
+    );
+
+    rotateY.set(
+      0
+    );
 
     onCursor({
-      visible: false,
-      x: 0,
-      y: 0,
+      visible:
+        false,
+
+      x:
+        0,
+
+      y:
+        0,
     });
   }
 
@@ -1066,9 +1161,11 @@ function TiltExpertiseCard({
           onCursor({
             visible:
               true,
+
             x:
               event.clientX +
               18,
+
             y:
               event.clientY +
               18,
@@ -1109,9 +1206,11 @@ function TiltExpertiseCard({
                 : "border-[var(--gold-soft)] text-[var(--gold-dark)]"
             }`}
           >
+
             {
               item.number
             }
+
           </span>
 
           <div className="min-w-0 flex-1">
@@ -1119,18 +1218,24 @@ function TiltExpertiseCard({
             <div className="flex items-start justify-between gap-4">
 
               <div>
+
                 <h3 className="text-lg font-semibold tracking-[-0.02em] text-[var(--ink)]">
+
                   {
                     item.title
                   }
+
                 </h3>
 
                 <p className="mt-1 text-[11px] uppercase tracking-[0.11em] text-[var(--muted)]">
+
                   {
                     item.subtitle ??
                       item.short
                   }
+
                 </p>
+
               </div>
 
               <span
@@ -1144,9 +1249,11 @@ function TiltExpertiseCard({
             </div>
 
             <p className="mt-4 text-sm font-light leading-6 text-[var(--body-text)]">
+
               {
                 item.description
               }
+
             </p>
 
             {item.toolGroups ? (
@@ -1163,9 +1270,11 @@ function TiltExpertiseCard({
                     >
 
                       <p className="text-[8px] font-semibold uppercase tracking-[0.14em] text-[var(--gold-dark)]">
+
                         {
                           group.label
                         }
+
                       </p>
 
                       <div className="mt-1.5 flex flex-wrap gap-1.5">
@@ -1230,15 +1339,18 @@ function ToolChip({
 }) {
   return (
     <span className="rounded-full border border-[var(--line)] bg-[var(--page)]/70 px-2.5 py-1 text-[9px] font-medium text-[var(--muted)]">
+
       {
         tool
       }
+
     </span>
   );
 }
 
 /* =========================================================
    DESKTOP LIVE NETWORK
+   UNCHANGED
 ========================================================= */
 
 function DesktopNetwork({
@@ -1263,7 +1375,9 @@ function DesktopNetwork({
         aria-hidden="true"
         className="absolute inset-0 opacity-70"
       >
+
         <div className="network-grid absolute inset-0" />
+
       </div>
 
       <svg
@@ -1271,6 +1385,7 @@ function DesktopNetwork({
         className="pointer-events-none absolute inset-0 h-full w-full"
         aria-hidden="true"
       >
+
         {items.map(
           (
             item,
@@ -1293,7 +1408,9 @@ function DesktopNetwork({
               >
 
                 <motion.path
-                  d={path}
+                  d={
+                    path
+                  }
                   fill="none"
                   stroke={
                     active
@@ -1309,27 +1426,32 @@ function DesktopNetwork({
                   initial={{
                     pathLength:
                       0,
+
                     opacity:
                       0,
                   }}
                   whileInView={{
                     pathLength:
                       1,
+
                     opacity:
                       1,
                   }}
                   viewport={{
                     once:
                       true,
+
                     amount:
                       0.25,
                   }}
                   transition={{
                     duration:
                       1.1,
+
                     delay:
                       index *
                       0.08,
+
                     ease: [
                       0.22,
                       1,
@@ -1352,11 +1474,15 @@ function DesktopNetwork({
                   }
                   opacity="0.95"
                 >
+
                   <animateMotion
                     dur={`${3.2 + index * 0.35}s`}
                     repeatCount="indefinite"
-                    path={path}
+                    path={
+                      path
+                    }
                   />
+
                 </circle>
 
                 <circle
@@ -1364,40 +1490,51 @@ function DesktopNetwork({
                   fill="var(--network-particle)"
                   opacity="0.45"
                 >
+
                   <animateMotion
                     dur={`${4.8 + index * 0.27}s`}
                     begin={`${index * 0.3}s`}
                     repeatCount="indefinite"
-                    path={path}
+                    path={
+                      path
+                    }
                   />
+
                 </circle>
 
               </g>
             );
           }
         )}
+
       </svg>
 
       {/* CENTER */}
+
       <div className="absolute left-[47.4%] top-1/2 z-20 w-[190px] -translate-x-1/2 -translate-y-1/2 rounded-[24px] border border-[var(--gold)] bg-[var(--network-center)] px-5 py-5 text-center shadow-[0_20px_70px_var(--gold-halo)]">
 
         <div className="mx-auto mb-3 h-2 w-2 rounded-full bg-[var(--gold)] shadow-[0_0_0_7px_var(--gold-halo)]" />
 
         <p className="text-[12px] font-semibold tracking-[0.05em] text-[var(--ink)]">
+
           {
             centerTitle
           }
+
         </p>
 
         <p className="mt-1 text-[9px] uppercase tracking-[0.12em] text-[var(--muted)]">
+
           {
             centerSubtitle
           }
+
         </p>
 
       </div>
 
       {/* NODES */}
+
       {items.map(
         (
           item
@@ -1438,15 +1575,19 @@ function DesktopNetwork({
             >
 
               <p className="text-[11px] font-semibold leading-4 text-[var(--ink)]">
+
                 {
                   item.title
                 }
+
               </p>
 
               <p className="mt-1 text-[8px] leading-3 text-[var(--muted)]">
+
                 {
                   item.short
                 }
+
               </p>
 
               <div className="mt-2 flex gap-1">
@@ -1482,7 +1623,8 @@ function DesktopNetwork({
 }
 
 /* =========================================================
-   MOBILE NETWORK
+   PHONE COOL STAR NETWORK
+   PHONE ONLY THROUGH PARENT md:hidden
 ========================================================= */
 
 function MobileNetwork({
@@ -1500,111 +1642,325 @@ function MobileNetwork({
   centerTitle: string;
   centerSubtitle: string;
 }) {
+  const mobilePaths: Record<
+    ExpertiseKey,
+    string
+  > = {
+    analysis:
+      "M195 280 C168 218 128 150 78 92",
+
+    bi:
+      "M195 280 C222 218 262 150 312 92",
+
+    performance:
+      "M195 280 C240 270 283 258 326 248",
+
+    quality:
+      "M195 280 C225 340 265 395 307 424",
+
+    automation:
+      "M195 280 C165 340 125 395 83 424",
+
+    decision:
+      "M195 280 C150 270 107 258 64 248",
+
+    development:
+      "M195 280 C195 350 195 430 195 500",
+  };
+
+  const mobilePositions: Record<
+    ExpertiseKey,
+    string
+  > = {
+    analysis:
+      "left-[20%] top-[16%]",
+
+    bi:
+      "left-[80%] top-[16%]",
+
+    performance:
+      "left-[83.5%] top-[44.5%]",
+
+    quality:
+      "left-[79%] top-[76%]",
+
+    automation:
+      "left-[21%] top-[76%]",
+
+    decision:
+      "left-[16.5%] top-[44.5%]",
+
+    development:
+      "left-1/2 top-[89%]",
+  };
+
   return (
-    <div className="relative overflow-hidden rounded-[28px] border border-[var(--line)] bg-[var(--network-bg)] p-5">
+    <div className="expertise-network relative mx-auto aspect-[390/560] w-full max-w-[430px] overflow-hidden rounded-[28px] border border-[var(--line)] bg-[var(--network-bg)] shadow-[0_24px_70px_rgba(15,23,42,0.07)]">
 
-      <div className="network-grid pointer-events-none absolute inset-0 opacity-60" />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 opacity-70"
+      >
 
-      <div className="relative z-10">
-
-        <div className="mx-auto w-fit rounded-[22px] border border-[var(--gold)] bg-[var(--network-center)] px-6 py-4 text-center shadow-[0_15px_50px_var(--gold-halo)]">
-
-          <span className="mx-auto mb-2 block h-2 w-2 rounded-full bg-[var(--gold)]" />
-
-          <p className="text-[11px] font-semibold text-[var(--ink)]">
-            {
-              centerTitle
-            }
-          </p>
-
-          <p className="mt-1 text-[8px] uppercase tracking-[0.11em] text-[var(--muted)]">
-            {
-              centerSubtitle
-            }
-          </p>
-
-        </div>
-
-        <div className="network-mobile-spine relative mx-auto h-10 w-[1px] bg-[var(--network-line)]">
-
-          <span className="network-mobile-particle absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-[var(--gold)]" />
-
-        </div>
-
-        <div className="grid grid-cols-2 gap-2">
-
-          {items.map(
-            (
-              item,
-              index
-            ) => {
-              const active =
-                activeKey ===
-                item.key;
-
-              const fillsLastRow =
-                items.length %
-                  2 ===
-                  1 &&
-                index ===
-                  items.length -
-                    1;
-
-              return (
-                <button
-                  key={
-                    item.key
-                  }
-                  type="button"
-                  aria-pressed={
-                    active
-                  }
-                  onMouseEnter={() =>
-                    setActiveKey(
-                      item.key
-                    )
-                  }
-                  onFocus={() =>
-                    setActiveKey(
-                      item.key
-                    )
-                  }
-                  onClick={() =>
-                    setActiveKey(
-                      item.key
-                    )
-                  }
-                  className={`rounded-2xl border px-3 py-3 text-left transition ${
-                    fillsLastRow
-                      ? "col-span-2"
-                      : ""
-                  } ${
-                    active
-                      ? "border-[var(--gold)] bg-[var(--expertise-active)]"
-                      : "border-[var(--line)] bg-[var(--surface)]/80"
-                  }`}
-                >
-
-                  <p className="text-[10px] font-semibold leading-4 text-[var(--ink)]">
-                    {
-                      item.title
-                    }
-                  </p>
-
-                  <p className="mt-1 text-[8px] leading-3 text-[var(--muted)]">
-                    {
-                      item.short
-                    }
-                  </p>
-
-                </button>
-              );
-            }
-          )}
-
-        </div>
+        <div className="network-grid absolute inset-0" />
 
       </div>
+
+      {/* ANIMATED STAR CONNECTIONS */}
+
+      <svg
+        viewBox="0 0 390 560"
+        preserveAspectRatio="xMidYMid meet"
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        aria-hidden="true"
+      >
+
+        {items.map(
+          (
+            item,
+            index
+          ) => {
+            const path =
+              mobilePaths[
+                item.key
+              ];
+
+            const active =
+              activeKey ===
+              item.key;
+
+            return (
+              <g
+                key={
+                  item.key
+                }
+              >
+
+                <motion.path
+                  d={
+                    path
+                  }
+                  fill="none"
+                  stroke={
+                    active
+                      ? "var(--gold)"
+                      : "var(--network-line)"
+                  }
+                  strokeWidth={
+                    active
+                      ? 2.4
+                      : 1.15
+                  }
+                  strokeLinecap="round"
+                  initial={{
+                    pathLength:
+                      0,
+
+                    opacity:
+                      0,
+                  }}
+                  whileInView={{
+                    pathLength:
+                      1,
+
+                    opacity:
+                      1,
+                  }}
+                  viewport={{
+                    once:
+                      true,
+
+                    amount:
+                      0.2,
+                  }}
+                  transition={{
+                    duration:
+                      1.05,
+
+                    delay:
+                      index *
+                      0.07,
+
+                    ease: [
+                      0.22,
+                      1,
+                      0.36,
+                      1,
+                    ],
+                  }}
+                />
+
+                <circle
+                  r={
+                    active
+                      ? 4
+                      : 3
+                  }
+                  fill={
+                    active
+                      ? "var(--gold)"
+                      : "var(--network-particle)"
+                  }
+                  opacity="0.95"
+                >
+
+                  <animateMotion
+                    dur={`${3.1 + index * 0.32}s`}
+                    repeatCount="indefinite"
+                    path={
+                      path
+                    }
+                  />
+
+                </circle>
+
+                <circle
+                  r="2"
+                  fill="var(--network-particle)"
+                  opacity="0.42"
+                >
+
+                  <animateMotion
+                    dur={`${4.6 + index * 0.25}s`}
+                    begin={`${index * 0.28}s`}
+                    repeatCount="indefinite"
+                    path={
+                      path
+                    }
+                  />
+
+                </circle>
+
+              </g>
+            );
+          }
+        )}
+
+      </svg>
+
+      {/* CENTER */}
+
+      <div className="absolute left-1/2 top-1/2 z-20 w-[156px] -translate-x-1/2 -translate-y-1/2 rounded-[22px] border border-[var(--gold)] bg-[var(--network-center)] px-4 py-4 text-center shadow-[0_18px_58px_var(--gold-halo)]">
+
+        <div className="mx-auto mb-2.5 h-2 w-2 rounded-full bg-[var(--gold)] shadow-[0_0_0_6px_var(--gold-halo)]" />
+
+        <p className="text-[10px] font-semibold tracking-[0.045em] text-[var(--ink)]">
+
+          {
+            centerTitle
+          }
+
+        </p>
+
+        <p className="mt-1 text-[7px] uppercase tracking-[0.09em] text-[var(--muted)]">
+
+          {
+            centerSubtitle
+          }
+
+        </p>
+
+      </div>
+
+      {/* STAR NODES */}
+
+      {items.map(
+        (
+          item
+        ) => {
+          const active =
+            activeKey ===
+            item.key;
+
+          const development =
+            item.key ===
+            "development";
+
+          return (
+            <button
+              key={
+                item.key
+              }
+              type="button"
+              aria-pressed={
+                active
+              }
+              onFocus={() =>
+                setActiveKey(
+                  item.key
+                )
+              }
+              onClick={() =>
+                setActiveKey(
+                  item.key
+                )
+              }
+              className={`absolute z-30 -translate-x-1/2 -translate-y-1/2 rounded-[16px] border px-2.5 py-2.5 text-left transition-all duration-300 ${mobilePositions[item.key]} ${
+                development
+                  ? "w-[164px]"
+                  : "w-[116px]"
+              } ${
+                active
+                  ? "scale-[1.04] border-[var(--gold)] bg-[var(--surface)] shadow-[0_12px_42px_var(--gold-halo)]"
+                  : "border-[var(--line)] bg-[var(--surface)]/90"
+              }`}
+            >
+
+              <div className="flex items-start justify-between gap-1.5">
+
+                <p className="text-[9px] font-semibold leading-[1.25] text-[var(--ink)]">
+
+                  {
+                    item.title
+                  }
+
+                </p>
+
+                <span
+                  className={`mt-1 h-1.5 w-1.5 shrink-0 rounded-full transition-all ${
+                    active
+                      ? "bg-[var(--gold)] shadow-[0_0_0_4px_var(--gold-halo)]"
+                      : "bg-[var(--line)]"
+                  }`}
+                />
+
+              </div>
+
+              <p className="mt-1 text-[6.5px] leading-[1.35] text-[var(--muted)]">
+
+                {
+                  item.short
+                }
+
+              </p>
+
+              <div className="mt-2 flex gap-1">
+
+                {Array.from({
+                  length:
+                    active
+                      ? 4
+                      : 2,
+                }).map(
+                  (
+                    _,
+                    index
+                  ) => (
+                    <span
+                      key={
+                        index
+                      }
+                      className="h-1 w-1 rounded-full bg-[var(--gold)]"
+                    />
+                  )
+                )}
+
+              </div>
+
+            </button>
+          );
+        }
+      )}
 
     </div>
   );
@@ -1631,9 +1987,11 @@ function MetricCard({
       <div className="flex items-baseline gap-1">
 
         <span className="text-[13px] font-medium text-[var(--gold-dark)]">
+
           {
             prefix
           }
+
         </span>
 
         <CountUp
@@ -1650,9 +2008,11 @@ function MetricCard({
       <div className="mt-5 h-[1px] w-10 bg-[var(--gold)] transition-all duration-300 group-hover:w-20" />
 
       <p className="mt-5 text-sm font-light leading-6 text-[var(--body-text)]">
+
         {
           label
         }
+
       </p>
 
     </div>
@@ -1675,7 +2035,9 @@ function CountUp({
     useInView(
       ref,
       {
-        once: true,
+        once:
+          true,
+
         margin:
           "-60px",
       }
@@ -1684,14 +2046,20 @@ function CountUp({
   const [
     display,
     setDisplay,
-  ] = useState(0);
+  ] =
+    useState(
+      0
+    );
 
   useEffect(() => {
-    if (!inView) {
+    if (
+      !inView
+    ) {
       return;
     }
 
-    let frame = 0;
+    let frame =
+      0;
 
     const start =
       performance.now();
@@ -1705,8 +2073,11 @@ function CountUp({
       const progress =
         Math.min(
           1,
-          (now -
-            start) /
+
+          (
+            now -
+            start
+          ) /
             duration
         );
 
@@ -1715,6 +2086,7 @@ function CountUp({
         Math.pow(
           1 -
             progress,
+
           3
         );
 
@@ -1758,8 +2130,15 @@ function CountUp({
       }
       className="text-[42px] font-semibold leading-none tracking-[-0.05em] text-[var(--ink)] lg:text-[52px]"
     >
-      {display}
-      {suffix}
+
+      {
+        display
+      }
+
+      {
+        suffix
+      }
+
     </span>
   );
 }
@@ -1779,21 +2158,32 @@ function Reveal({
   return (
     <motion.div
       initial={{
-        opacity: 0,
-        y: 28,
+        opacity:
+          0,
+
+        y:
+          28,
       }}
       whileInView={{
-        opacity: 1,
-        y: 0,
+        opacity:
+          1,
+
+        y:
+          0,
       }}
       viewport={{
-        once: true,
-        amount: 0.15,
+        once:
+          true,
+
+        amount:
+          0.15,
       }}
       transition={{
         duration:
           0.7,
+
         delay,
+
         ease: [
           0.22,
           1,
@@ -1802,9 +2192,11 @@ function Reveal({
         ],
       }}
     >
+
       {
         children
       }
+
     </motion.div>
   );
 }
