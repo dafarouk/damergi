@@ -9,6 +9,7 @@ import {
   Gauge,
   MapPin,
   Sparkles,
+  UserRoundCheck,
   X,
   Zap,
 } from "lucide-react";
@@ -127,7 +128,9 @@ export default function RecruiterMode({
   ) {
     setOpen(false);
 
-    if (pathname !== "/") {
+    if (
+      pathname !== "/"
+    ) {
       window.location.href =
         `/#${id}`;
 
@@ -185,6 +188,21 @@ export default function RecruiterMode({
         }
       },
       120
+    );
+  }
+
+  function openReferences() {
+    setOpen(false);
+
+    window.setTimeout(
+      () => {
+        window.dispatchEvent(
+          new CustomEvent(
+            "damergi:open-references"
+          )
+        );
+      },
+      140
     );
   }
 
@@ -366,6 +384,8 @@ export default function RecruiterMode({
 
             </div>
 
+            {/* HEADER */}
+
             <div className="relative border-b border-white/10 px-5 py-5 sm:px-8 sm:py-6">
 
               <div className="flex items-start justify-between gap-5">
@@ -436,7 +456,11 @@ export default function RecruiterMode({
 
             </div>
 
+            {/* BODY */}
+
             <div className="relative max-h-[76vh] overflow-y-auto px-5 py-6 sm:px-8 sm:py-8">
+
+              {/* METRICS */}
 
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
@@ -468,6 +492,8 @@ export default function RecruiterMode({
                 )}
 
               </div>
+
+              {/* WHY ME */}
 
               <div className="mt-8">
 
@@ -531,6 +557,8 @@ export default function RecruiterMode({
                 </div>
 
               </div>
+
+              {/* ROLES + STACK */}
 
               <div className="mt-8 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
 
@@ -652,7 +680,53 @@ export default function RecruiterMode({
 
               </div>
 
+              {/* PROFESSIONAL REFERENCES */}
+
+              <button
+                type="button"
+                onClick={
+                  openReferences
+                }
+                className="mt-6 flex w-full items-center gap-4 rounded-[22px] border border-[#bc965d]/25 bg-[#bc965d]/[0.07] p-4 text-left transition hover:border-[#bc965d]/50 hover:bg-[#bc965d]/[0.12]"
+              >
+
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#bc965d]/25 bg-[#bc965d]/10 text-[#d2ad73]">
+
+                  <UserRoundCheck
+                    size={20}
+                    strokeWidth={
+                      1.7
+                    }
+                  />
+
+                </span>
+
+                <span className="min-w-0 flex-1">
+
+                  <span className="block text-sm font-semibold text-white/90">
+
+                    {isFr
+                      ? "Mes références professionnelles"
+                      : "My professional references"}
+
+                  </span>
+
+                  <span className="mt-1 block text-xs leading-5 text-white/42">
+                    Nadine FONTAINE · Air France — Aymen OMRI · AYcode
+                  </span>
+
+                </span>
+
+                <ArrowUpRight
+                  size={16}
+                  className="shrink-0 text-[#d2ad73]"
+                />
+
+              </button>
+
             </div>
+
+            {/* FOOTER */}
 
             <div className="relative flex flex-wrap items-center gap-2 border-t border-white/10 px-5 py-4 sm:px-8">
 
@@ -671,6 +745,24 @@ export default function RecruiterMode({
                 <ArrowUpRight
                   size={14}
                 />
+
+              </button>
+
+              <button
+                type="button"
+                onClick={
+                  openReferences
+                }
+                className="inline-flex items-center gap-2 rounded-full border border-[#bc965d]/25 bg-[#bc965d]/[0.06] px-4 py-2.5 text-xs font-semibold text-[#e0bd88] transition hover:border-[#bc965d]/45 hover:bg-[#bc965d]/[0.12]"
+              >
+
+                <UserRoundCheck
+                  size={14}
+                />
+
+                {isFr
+                  ? "Références"
+                  : "References"}
 
               </button>
 

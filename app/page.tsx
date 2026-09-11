@@ -11,6 +11,7 @@ import StoryHero from "@/components/Hero/StoryHero";
 import LoadingScreen from "@/components/Loading/LoadingScreen";
 import ExpertiseSection from "@/components/Expertise/ExpertiseSection";
 import NextChapterRadarController from "@/components/NextChapter/NextChapterRadarController";
+import ProfessionalReferencesController from "@/components/References/ProfessionalReferencesController";
 import PageProgress from "@/components/Progress/PageProgress";
 
 import type {
@@ -142,6 +143,7 @@ export default function Home() {
     const remaining =
       Math.max(
         0,
+
         loaderDuration -
           elapsed
       );
@@ -153,6 +155,7 @@ export default function Home() {
             false
           );
         },
+
         remaining
       );
 
@@ -177,6 +180,7 @@ export default function Home() {
 
     localStorage.setItem(
       "damergi-language",
+
       nextLanguage
     );
 
@@ -210,6 +214,12 @@ export default function Home() {
       />
 
       <NextChapterRadarController
+        language={
+          language
+        }
+      />
+
+      <ProfessionalReferencesController
         language={
           language
         }
