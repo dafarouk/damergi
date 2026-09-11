@@ -1042,10 +1042,13 @@ export default function StoryHero({
                   1,
                 ],
               }}
-              className="relative mx-auto h-[400px] max-w-[500px] overflow-hidden sm:h-[500px]"
+              className="relative mx-auto h-[400px] max-w-[500px] select-none overflow-hidden sm:h-[500px]"
+              onContextMenu={(event) =>
+                event.preventDefault()
+              }
             >
 
-              <div className="aura-stage absolute -bottom-[95px] left-1/2 h-[560px] w-[560px] -translate-x-1/2 scale-[0.67] sm:-bottom-[50px] sm:scale-[0.82]">
+              <div className="aura-stage absolute -bottom-[95px] left-1/2 z-0 h-[560px] w-[560px] -translate-x-1/2 scale-[0.67] sm:-bottom-[50px] sm:scale-[0.82]">
 
                 <div className="aura-soft-glow" />
 
@@ -1075,27 +1078,15 @@ export default function StoryHero({
 
               </div>
 
-              <div
-  className="relative select-none"
-  onContextMenu={(event) =>
-    event.preventDefault()
-  }
->
-  <Image
-    src="/images/portrait/portrait-farouk-3.png"
-    alt="Ahmed-Farouk DAMERGI"
-    width={540}
-    height={800}
-    priority
-    draggable={false}
-    className="pointer-events-none max-h-[650px] w-auto select-none object-contain drop-shadow-[0_30px_38px_rgba(15,23,42,0.18)]"
-  />
-
-  <div
-    className="absolute inset-0 z-20"
-    aria-hidden="true"
-  />
-</div>
+              <Image
+                src="/images/portrait/portrait-farouk-3.png"
+                alt="Ahmed-Farouk DAMERGI"
+                width={540}
+                height={800}
+                priority
+                draggable={false}
+                className="pointer-events-none absolute bottom-0 left-1/2 z-10 max-h-[390px] w-auto -translate-x-1/2 select-none object-contain drop-shadow-[0_25px_35px_rgba(15,23,42,0.18)] sm:max-h-[490px]"
+              />
 
             </motion.div>
 
@@ -1498,7 +1489,7 @@ function DesktopPortrait() {
   return (
     <div className="relative flex h-[690px] max-h-[calc(100vh-11rem)] translate-y-[45px] items-end justify-center">
 
-      <div className="aura-stage absolute -bottom-3 left-1/2 h-[560px] w-[560px] -translate-x-1/2">
+      <div className="aura-stage absolute -bottom-3 left-1/2 z-0 h-[560px] w-[560px] -translate-x-1/2">
 
         <div className="aura-soft-glow" />
 
@@ -1563,7 +1554,10 @@ function DesktopPortrait() {
             1,
           ],
         }}
-        className="relative z-10 flex h-full items-end justify-center"
+        className="relative z-10 flex h-full select-none items-end justify-center"
+        onContextMenu={(event) =>
+          event.preventDefault()
+        }
       >
 
         <Image
@@ -1576,7 +1570,8 @@ function DesktopPortrait() {
             800
           }
           priority
-          className="max-h-[560px] w-auto object-contain drop-shadow-[0_30px_38px_rgba(15,23,42,0.18)]"
+          draggable={false}
+          className="pointer-events-none max-h-[560px] w-auto select-none object-contain drop-shadow-[0_30px_38px_rgba(15,23,42,0.18)]"
         />
 
       </motion.div>
