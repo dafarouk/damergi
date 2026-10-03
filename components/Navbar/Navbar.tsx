@@ -10,15 +10,12 @@ import {
   BriefcaseBusiness,
   FolderKanban,
   Menu,
-  Moon,
-  Sun,
   UserRoundCheck,
   X,
 } from "lucide-react";
 
 import {
   useEffect,
-  useRef,
   useState,
   type MouseEvent,
 } from "react";
@@ -40,26 +37,12 @@ type NavbarProps = {
   ) => void;
 };
 
-type ViewTransitionDocument =
-  Document & {
-    startViewTransition?: (
-      callback: () => void
-    ) => {
-      finished: Promise<void>;
-    };
-  };
-
 export default function Navbar({
   language,
   onLanguageChange,
 }: NavbarProps) {
   const pathname =
     usePathname();
-
-  const [
-    darkMode,
-    setDarkMode,
-  ] = useState(false);
 
   const [
     mobileMenuOpen,
@@ -75,31 +58,6 @@ export default function Navbar({
     recruiterShortcutDismissed,
     setRecruiterShortcutDismissed,
   ] = useState(false);
-
-  const themeButtonRef =
-    useRef<HTMLButtonElement>(
-      null
-    );
-
-  useEffect(() => {
-    const savedTheme =
-      localStorage.getItem(
-        "damergi-theme"
-      );
-
-    if (
-      savedTheme ===
-      "dark"
-    ) {
-      document.documentElement.classList.add(
-        "theme-dark"
-      );
-
-      setDarkMode(
-        true
-      );
-    }
-  }, []);
 
   useEffect(() => {
     setMobileMenuOpen(
@@ -151,101 +109,6 @@ export default function Navbar({
       );
     };
   }, [pathname]);
-
-  function applyTheme(
-    nextTheme: boolean
-  ) {
-    setDarkMode(
-      nextTheme
-    );
-
-    document.documentElement.classList.toggle(
-      "theme-dark",
-      nextTheme
-    );
-
-    localStorage.setItem(
-      "damergi-theme",
-
-      nextTheme
-        ? "dark"
-        : "light"
-    );
-  }
-
-  function toggleTheme() {
-    const nextTheme =
-      !darkMode;
-
-    const html =
-      document.documentElement;
-
-    const button =
-      themeButtonRef.current;
-
-    if (button) {
-      const rect =
-        button.getBoundingClientRect();
-
-      html.style.setProperty(
-        "--theme-x",
-
-        `${
-          rect.left +
-          rect.width / 2
-        }px`
-      );
-
-      html.style.setProperty(
-        "--theme-y",
-
-        `${
-          rect.top +
-          rect.height / 2
-        }px`
-      );
-    }
-
-    const reduceMotion =
-      window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-
-    const transitionDocument =
-      document as ViewTransitionDocument;
-
-    if (
-      reduceMotion ||
-      !transitionDocument.startViewTransition
-    ) {
-      applyTheme(
-        nextTheme
-      );
-
-      return;
-    }
-
-    html.classList.add(
-      "theme-transitioning"
-    );
-
-    const transition =
-      transitionDocument.startViewTransition(
-        () => {
-          applyTheme(
-            nextTheme
-          );
-        }
-      );
-
-    transition.finished.finally(
-      () => {
-        html.classList.remove(
-          "theme-transitioning"
-        );
-      }
-    );
-  }
 
   function toggleLanguage() {
     onLanguageChange(
@@ -483,27 +346,6 @@ export default function Navbar({
               ) : (
                 <Menu
                   size={18}
-                />
-              )}
-            </button>
-
-            <button
-              ref={
-                themeButtonRef
-              }
-              type="button"
-              onClick={
-                toggleTheme
-              }
-              className="flex h-9 w-9 items-center justify-center rounded-full text-white/80 transition hover:bg-white/10 hover:text-white lg:h-10 lg:w-10"
-            >
-              {darkMode ? (
-                <Sun
-                  size={17}
-                />
-              ) : (
-                <Moon
-                  size={17}
                 />
               )}
             </button>

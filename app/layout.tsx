@@ -2,8 +2,11 @@ import type {
   Metadata,
 } from "next";
 
+import Script from "next/script";
+
 import "./globals.css";
 import "./effects.css";
+import "./halloween.css";
 
 import SiteEffects from "@/components/Effects/SiteEffects";
 
@@ -207,6 +210,38 @@ const personStructuredData =
     ],
   };
 
+const seasonBootScript = `
+(() => {
+  try {
+    const root = document.documentElement;
+    const params = new URLSearchParams(window.location.search);
+    const override = params.get("season");
+    const month = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Europe/Paris",
+      month: "2-digit",
+    }).format(new Date());
+
+    const halloween =
+      override === "halloween" ||
+      (override !== "normal" && month === "10");
+
+    root.classList.add("theme-dark");
+
+    if (halloween) {
+      root.setAttribute("data-season", "halloween");
+    } else {
+      root.removeAttribute("data-season");
+    }
+
+    try {
+      localStorage.setItem("damergi-theme", "dark");
+    } catch {}
+  } catch {
+    document.documentElement.classList.add("theme-dark");
+  }
+})();
+`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -216,9 +251,19 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
+      className="theme-dark"
       suppressHydrationWarning
     >
       <body>
+
+        <Script
+          id="damergi-season-boot"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html:
+              seasonBootScript,
+          }}
+        />
 
         <script
           type="application/ld+json"

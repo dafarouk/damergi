@@ -131,6 +131,11 @@ export default function CVModal({
           />
 
           <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label={
+              labels.title
+            }
             initial={{
               opacity: 0,
               y: 28,

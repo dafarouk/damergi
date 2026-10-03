@@ -12,11 +12,16 @@ import LoadingScreen from "@/components/Loading/LoadingScreen";
 import ExpertiseSection from "@/components/Expertise/ExpertiseSection";
 import NextChapterRadarController from "@/components/NextChapter/NextChapterRadarController";
 import ProfessionalReferencesController from "@/components/References/ProfessionalReferencesController";
+import SeasonalHalloween from "@/components/Seasonal/SeasonalHalloween";
 import PageProgress from "@/components/Progress/PageProgress";
 
 import type {
   Language,
 } from "@/data/timeline";
+
+import {
+  shouldUseHalloweenSeason,
+} from "@/lib/season";
 
 export default function Home() {
   const [
@@ -52,6 +57,17 @@ export default function Home() {
     );
 
   useEffect(() => {
+    document.documentElement.classList.add(
+      "theme-dark"
+    );
+
+    localStorage.setItem(
+      "damergi-theme",
+      "dark"
+    );
+  }, []);
+
+  useEffect(() => {
     const savedLanguage =
       localStorage.getItem(
         "damergi-language"
@@ -78,7 +94,16 @@ export default function Home() {
         "damergi-intro-seen"
       );
 
-    if (
+    const halloween =
+      shouldUseHalloweenSeason();
+
+    if (halloween) {
+      setLoaderDuration(
+        alreadySeen
+          ? 2400
+          : 3800
+      );
+    } else if (
       alreadySeen
     ) {
       setLoaderDuration(
@@ -88,7 +113,9 @@ export default function Home() {
       setLoaderDuration(
         2600
       );
+    }
 
+    if (!alreadySeen) {
       localStorage.setItem(
         "damergi-intro-seen",
         "1"
@@ -191,6 +218,18 @@ export default function Home() {
   return (
     <>
       <PageProgress />
+
+      <SeasonalHalloween
+        language={
+          language
+        }
+        loaderVisible={
+          showLoader
+        }
+        loaderDurationMs={
+          loaderDuration
+        }
+      />
 
       <LoadingScreen
         visible={

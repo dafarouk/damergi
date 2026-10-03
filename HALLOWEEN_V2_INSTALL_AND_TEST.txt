@@ -1,0 +1,85 @@
+DAMERGI.COM — HALLOWEEN V2
+
+IMPORTANT
+- This patch was prepared from the exact project archive you sent.
+- It keeps the Halloween theme seasonal: October in Europe/Paris = ON, November 1 = normal DAMERGI styling again.
+- The site itself now stays DARK all year; the light/dark toggle is removed.
+- Do NOT push before localhost testing.
+
+FILES TO REPLACE
+1. app/layout.tsx
+2. app/page.tsx
+3. components/Navbar/Navbar.tsx
+4. components/Seasonal/SeasonalHalloween.tsx
+5. components/CV/CVModal.tsx
+
+FILES TO CREATE
+1. app/halloween.css
+2. lib/season.ts
+3. public/images/seasonal/evil-pumpkin.svg
+4. public/images/seasonal/bat-silhouette.svg
+5. public/images/seasonal/spider-web.svg
+6. public/images/seasonal/forest-back.svg
+7. public/images/seasonal/forest-front.svg
+
+WHAT CHANGED
+- Halloween repeat-visit loader: 2.4 seconds.
+- Halloween first-visit loader: 3.8 seconds.
+- No emoji pumpkins or cartoon bats.
+- New evil jack-o'-lantern SVG with textured/rough organic rendering.
+- New realistic bat silhouette asset and subtler bat flight near the upper sky.
+- Clear cratered moon.
+- Moving two-layer night forest.
+- Moving clouds, stars and fog.
+- Spider-web corner assets.
+- Evil pumpkin now appears inside the portrait aura, not only circles.
+- AFD background marks become evil pumpkin marks during Halloween.
+- Ticker diamonds become small evil pumpkin marks during Halloween.
+- Halloween styling applies globally to role=dialog windows:
+  Projects, README, References, Recruiter, Job Radar, Journey detail,
+  Command Palette, and CV modal.
+- CV modal now has dialog semantics so the seasonal modal theme reaches it too.
+- Theme button removed entirely.
+- Normal season remains the original DAMERGI navy/gold DARK design.
+
+AUTOMATIC DATE RULE
+Europe/Paris October 1 00:00 -> Halloween ON.
+Europe/Paris November 1 00:00 -> Halloween OFF.
+The open page re-checks every 30 seconds.
+
+LOCAL TEST OVERRIDES
+Force Halloween:
+http://localhost:3000/?season=halloween
+
+Force normal DAMERGI mode:
+http://localhost:3000/?season=normal
+
+LOCAL TEST
+cd C:\Users\fdame\Desktop\damergi
+npm run dev
+
+CHECK DESKTOP + PHONE
+1. Loader is visible long enough.
+2. Evil pumpkin is not emoji/cartoon style.
+3. Moon is clearly visible.
+4. Forest has slow parallax-like movement.
+5. Clouds/stars/fog are subtle.
+6. Bats look like silhouettes and do not dominate the screen.
+7. Aura has the evil pumpkin + orange glow.
+8. Projects modal is Halloween themed.
+9. References modal is Halloween themed.
+10. Recruiter modal is Halloween themed.
+11. Job-fit radar is Halloween themed.
+12. Journey "Learn more" modal is Halloween themed.
+13. README popup is Halloween themed.
+14. CV modal is Halloween themed.
+15. Theme toggle is gone on desktop and mobile.
+16. ?season=normal restores normal navy/gold design, still dark.
+
+AFTER VISUAL TEST
+Stop the dev server with Ctrl+C, then run:
+
+cd C:\Users\fdame\Desktop\damergi
+npm run build
+
+Do not push unless the build succeeds.

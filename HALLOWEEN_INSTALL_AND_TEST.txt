@@ -1,0 +1,33 @@
+HALLOWEEN SEASONAL UPDATE
+
+CREATE:
+C:\Users\fdame\Desktop\damergi\components\Seasonal\SeasonalHalloween.tsx
+
+REPLACE:
+C:\Users\fdame\Desktop\damergi\app\page.tsx
+
+LOCAL TEST:
+cd C:\Users\fdame\Desktop\damergi
+npm run dev
+
+Automatic behavior:
+- Europe/Paris October = Halloween ON.
+- November 1 = normal design restored automatically.
+- Re-check every 30 seconds while the page stays open.
+- Existing damergi-theme preference is preserved.
+- Halloween forces dark mode temporarily and hides the theme toggle.
+
+Developer test URLs:
+http://localhost:3000/?season=halloween
+http://localhost:3000/?season=normal
+
+Check desktop + phone:
+- Halloween loader
+- bats after loader
+- pumpkin background marks
+- orange aura
+- pumpkin ticker separators
+- theme toggle hidden
+- recruiter/references/projects/radar still work
+
+Do NOT push yet. Test localhost first.
