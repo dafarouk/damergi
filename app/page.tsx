@@ -51,6 +51,11 @@ export default function Home() {
     setShowLoader,
   ] = useState(true);
 
+  const [
+    loaderReady,
+    setLoaderReady,
+  ] = useState(false);
+
   const startedAt =
     useRef(
       Date.now()
@@ -100,8 +105,8 @@ export default function Home() {
     if (halloween) {
       setLoaderDuration(
         alreadySeen
-          ? 2400
-          : 3800
+          ? 2200
+          : 2600
       );
     } else if (
       alreadySeen
@@ -163,6 +168,40 @@ export default function Home() {
       return;
     }
 
+    const halloween =
+      shouldUseHalloweenSeason();
+
+    setLoaderReady(
+      true
+    );
+
+    /*
+      Halloween intentionally plays from 0 -> 100%
+      AFTER the real page has finished loading.
+      This prevents hydration / asset loading time from
+      eating most of the seasonal intro.
+    */
+    if (halloween) {
+      const timer =
+        window.setTimeout(
+          () => {
+            setShowLoader(
+              false
+            );
+          },
+          loaderDuration
+        );
+
+      return () => {
+        window.clearTimeout(
+          timer
+        );
+      };
+    }
+
+    /*
+      Normal DAMERGI intro keeps the original smart timing.
+    */
     const elapsed =
       Date.now() -
       startedAt.current;
@@ -170,7 +209,6 @@ export default function Home() {
     const remaining =
       Math.max(
         0,
-
         loaderDuration -
           elapsed
       );
@@ -182,7 +220,6 @@ export default function Home() {
             false
           );
         },
-
         remaining
       );
 
@@ -207,7 +244,6 @@ export default function Home() {
 
     localStorage.setItem(
       "damergi-language",
-
       nextLanguage
     );
 
@@ -225,6 +261,9 @@ export default function Home() {
         }
         loaderVisible={
           showLoader
+        }
+        loaderReady={
+          loaderReady
         }
         loaderDurationMs={
           loaderDuration

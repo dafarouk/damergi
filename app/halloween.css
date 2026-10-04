@@ -1743,3 +1743,773 @@ html[data-season="halloween"] .expertise-section {
   }
 }
 
+/* =========================================================
+   BACK FOREST VISIBILITY FIX
+   Separate the two pine layers so the rear forest is clearly visible.
+========================================================= */
+
+.halloween-forest-back {
+  z-index: 1;
+
+  bottom: 1.5vh !important;
+
+  height: 74vh !important;
+
+  opacity: 0.72 !important;
+
+  filter:
+    brightness(1.42)
+    saturate(0.72);
+
+  background-position:
+    90px bottom !important;
+}
+
+.halloween-forest-front {
+  z-index: 2;
+
+  bottom: 0 !important;
+
+  height: 50vh !important;
+
+  opacity: 0.82 !important;
+
+  filter:
+    brightness(0.78);
+}
+
+@media (max-width: 1023px) {
+  .halloween-forest-back {
+    height: 62vh !important;
+
+    bottom: 1vh !important;
+
+    opacity: 0.7 !important;
+  }
+
+  .halloween-forest-front {
+    height: 45vh !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .halloween-forest-back {
+    height: 53vh !important;
+
+    background-position:
+      55px bottom !important;
+  }
+
+  .halloween-forest-front {
+    height: 39vh !important;
+  }
+}
+
+/* =========================================================
+   LOADER / MAIN SCENE SYNC
+   The loader now reuses the exact same stars, moon, clouds,
+   fog, webs and forest as the main Halloween scene.
+========================================================= */
+
+.halloween-loader {
+  opacity: 1;
+
+  transition:
+    opacity 650ms
+    ease;
+
+  background:
+    radial-gradient(
+      ellipse at 52% 102%,
+      rgba(146, 58, 20, 0.27) 0%,
+      rgba(79, 35, 20, 0.14) 30%,
+      transparent 58%
+    ),
+    linear-gradient(
+      180deg,
+      #05070b 0%,
+      #09111c 34%,
+      #151216 70%,
+      #160c0a 100%
+    ) !important;
+}
+
+.halloween-loader-exit {
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+.halloween-loader-scene {
+  position: absolute;
+  inset: 0;
+
+  z-index: 0;
+
+  overflow: hidden;
+
+  pointer-events: none;
+}
+
+/*
+  Loader-specific old moon / star / forest classes are no longer
+  rendered. The shared night scene uses the exact main-page classes.
+*/
+
+.halloween-loader-core {
+  z-index: 5;
+}
+
+/*
+  Progress is controlled by React only after the real page has loaded.
+  This prevents the bar from already being near 100% when the user
+  first sees the loader.
+*/
+
+.halloween-loader-progress-fill {
+  animation: none !important;
+
+  transform:
+    scaleX(0);
+
+  transition-property:
+    transform;
+
+  transition-timing-function:
+    linear;
+
+  will-change:
+    transform;
+}
+
+/*
+  During the loader, keep the shared scene behind the center content.
+*/
+
+.halloween-loader-scene .halloween-stars,
+.halloween-loader-scene .halloween-moon-wrap,
+.halloween-loader-scene .halloween-clouds,
+.halloween-loader-scene .halloween-fog,
+.halloween-loader-scene .halloween-web,
+.halloween-loader-scene .halloween-forest {
+  pointer-events: none;
+}
+
+/*
+  The loader and the homepage intentionally share these exact values.
+  This also makes the reveal feel like one continuous scene.
+*/
+
+.halloween-loader-scene .halloween-moon-wrap {
+  right: 7vw;
+  top: 8vh;
+
+  width: 250px;
+  height: 250px;
+}
+
+.halloween-loader-scene .halloween-forest-back {
+  height: 74vh !important;
+
+  opacity: 0.72 !important;
+
+  bottom: 1.5vh !important;
+
+  background-position:
+    90px bottom !important;
+
+  filter:
+    brightness(1.42)
+    saturate(0.72);
+}
+
+.halloween-loader-scene .halloween-forest-front {
+  height: 50vh !important;
+
+  opacity: 0.82 !important;
+
+  bottom: 0 !important;
+
+  filter:
+    brightness(0.78);
+}
+
+@media (max-width: 1023px) {
+  .halloween-loader-scene .halloween-forest-back {
+    height: 62vh !important;
+
+    bottom: 1vh !important;
+  }
+
+  .halloween-loader-scene .halloween-forest-front {
+    height: 45vh !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .halloween-loader-scene .halloween-moon-wrap {
+    right: -5vw;
+    top: 10vh;
+
+    width: 180px;
+    height: 180px;
+  }
+
+  .halloween-loader-scene .halloween-forest-back {
+    height: 53vh !important;
+
+    background-position:
+      55px bottom !important;
+  }
+
+  .halloween-loader-scene .halloween-forest-front {
+    height: 39vh !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .halloween-loader {
+    transition-duration:
+      0.01ms !important;
+  }
+
+  .halloween-loader-progress-fill {
+    transition-duration:
+      0.01ms !important;
+  }
+}
+
+
+
+/* =========================================================
+   QUICK LOADER SYNC — NO PARTIAL SCENE / NO SNAP
+========================================================= */
+
+.halloween-loader {
+  background:
+    linear-gradient(
+      180deg,
+      #05070b 0%,
+      #09111c 34%,
+      #151216 70%,
+      #160c0a 100%
+    ) !important;
+
+  transition:
+    opacity 340ms
+    ease !important;
+}
+
+.halloween-loader-visuals {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+
+  transition:
+    opacity 180ms
+    ease;
+
+  pointer-events: none;
+}
+
+.halloween-loader-visuals-ready {
+  opacity: 1;
+}
+
+.halloween-loader-visuals .halloween-loader-scene {
+  position: absolute;
+  inset: 0;
+}
+
+.halloween-loader-visuals .halloween-loader-core {
+  position: relative;
+
+  pointer-events: auto;
+}
+
+.halloween-loader-progress-fill {
+  animation: none !important;
+
+  transition-property:
+    transform !important;
+
+  transition-timing-function:
+    linear !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .halloween-loader-visuals {
+    transition-duration:
+      0.01ms !important;
+  }
+}
+
+
+/* =========================================================
+   CINEMATIC HALLOWEEN LOADER ENTRANCE
+   No snapping:
+   1) sky/moon/webs fade in
+   2) back forest rises
+   3) front forest rises
+   4) pumpkin pops
+   5) text + loading bar fade in
+========================================================= */
+
+.halloween-loader-visuals,
+.halloween-loader-visuals-ready {
+  opacity: 1 !important;
+
+  transition:
+    none !important;
+}
+
+/* ---------- SKY / MOON / WEBS ---------- */
+
+.halloween-loader-scene .halloween-stars,
+.halloween-loader-scene .halloween-moon-wrap,
+.halloween-loader-scene .halloween-web,
+.halloween-loader-scene .halloween-clouds,
+.halloween-loader-scene .halloween-fog {
+  opacity: 0;
+
+  animation:
+    none !important;
+}
+
+.halloween-loader-visuals-ready
+  .halloween-loader-scene
+  .halloween-stars {
+  animation:
+    halloween-loader-sky-in
+    300ms
+    ease-out
+    0ms
+    both !important;
+}
+
+.halloween-loader-visuals-ready
+  .halloween-loader-scene
+  .halloween-moon-wrap {
+  animation:
+    halloween-loader-moon-in
+    420ms
+    cubic-bezier(0.22, 1, 0.36, 1)
+    20ms
+    both !important;
+}
+
+.halloween-loader-visuals-ready
+  .halloween-loader-scene
+  .halloween-web {
+  animation:
+    halloween-loader-detail-in
+    380ms
+    ease-out
+    70ms
+    both !important;
+}
+
+.halloween-loader-visuals-ready
+  .halloween-loader-scene
+  .halloween-clouds {
+  animation:
+    halloween-loader-detail-in
+    460ms
+    ease-out
+    100ms
+    both !important;
+}
+
+.halloween-loader-visuals-ready
+  .halloween-loader-scene
+  .halloween-fog {
+  animation:
+    halloween-loader-detail-in
+    500ms
+    ease-out
+    130ms
+    both !important;
+}
+
+/* ---------- FORESTS RISE FROM BELOW ---------- */
+
+.halloween-loader-scene .halloween-forest-back {
+  opacity: 0 !important;
+
+  transform:
+    translate3d(
+      0,
+      34%,
+      0
+    ) !important;
+
+  animation:
+    none !important;
+
+  will-change:
+    transform,
+    opacity;
+}
+
+.halloween-loader-scene .halloween-forest-front {
+  opacity: 0 !important;
+
+  transform:
+    translate3d(
+      0,
+      44%,
+      0
+    ) !important;
+
+  animation:
+    none !important;
+
+  will-change:
+    transform,
+    opacity;
+}
+
+.halloween-loader-visuals-ready
+  .halloween-loader-scene
+  .halloween-forest-back {
+  animation:
+    halloween-loader-forest-back-rise
+    620ms
+    cubic-bezier(0.16, 1, 0.3, 1)
+    140ms
+    both !important;
+}
+
+.halloween-loader-visuals-ready
+  .halloween-loader-scene
+  .halloween-forest-front {
+  animation:
+    halloween-loader-forest-front-rise
+    680ms
+    cubic-bezier(0.16, 1, 0.3, 1)
+    245ms
+    both !important;
+}
+
+/* ---------- CENTER CONTENT ---------- */
+
+.halloween-loader-pumpkin-stage {
+  opacity: 0;
+
+  transform:
+    translate3d(
+      0,
+      22px,
+      0
+    )
+    scale(0.72)
+    rotate(-4deg);
+
+  transform-origin:
+    center center;
+
+  will-change:
+    transform,
+    opacity;
+}
+
+.halloween-loader-visuals-ready
+  .halloween-loader-pumpkin-stage {
+  animation:
+    halloween-loader-pumpkin-pop
+    520ms
+    cubic-bezier(0.18, 1.35, 0.38, 1)
+    430ms
+    both;
+}
+
+.halloween-loader-brand,
+.halloween-loader-edition,
+.halloween-loader-keywords,
+.halloween-loader-progress {
+  opacity: 0;
+
+  transform:
+    translate3d(
+      0,
+      10px,
+      0
+    );
+
+  will-change:
+    transform,
+    opacity;
+}
+
+.halloween-loader-visuals-ready
+  .halloween-loader-brand {
+  animation:
+    halloween-loader-copy-in
+    330ms
+    ease-out
+    600ms
+    both;
+}
+
+.halloween-loader-visuals-ready
+  .halloween-loader-edition {
+  animation:
+    halloween-loader-copy-in
+    330ms
+    ease-out
+    660ms
+    both;
+}
+
+.halloween-loader-visuals-ready
+  .halloween-loader-keywords {
+  animation:
+    halloween-loader-copy-in
+    350ms
+    ease-out
+    725ms
+    both;
+}
+
+.halloween-loader-visuals-ready
+  .halloween-loader-progress {
+  animation:
+    halloween-loader-copy-in
+    300ms
+    ease-out
+    790ms
+    both;
+}
+
+/* ---------- KEYFRAMES ---------- */
+
+@keyframes halloween-loader-sky-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.68;
+  }
+}
+
+@keyframes halloween-loader-moon-in {
+  from {
+    opacity: 0;
+
+    transform:
+      translate3d(
+        18px,
+        -10px,
+        0
+      )
+      scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translate3d(
+        0,
+        0,
+        0
+      )
+      scale(1);
+  }
+}
+
+@keyframes halloween-loader-detail-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes halloween-loader-forest-back-rise {
+  from {
+    opacity: 0;
+
+    transform:
+      translate3d(
+        0,
+        34%,
+        0
+      );
+  }
+
+  to {
+    opacity: 0.72;
+
+    transform:
+      translate3d(
+        0,
+        0,
+        0
+      );
+  }
+}
+
+@keyframes halloween-loader-forest-front-rise {
+  from {
+    opacity: 0;
+
+    transform:
+      translate3d(
+        0,
+        44%,
+        0
+      );
+  }
+
+  to {
+    opacity: 0.82;
+
+    transform:
+      translate3d(
+        0,
+        0,
+        0
+      );
+  }
+}
+
+@keyframes halloween-loader-pumpkin-pop {
+  0% {
+    opacity: 0;
+
+    transform:
+      translate3d(
+        0,
+        22px,
+        0
+      )
+      scale(0.72)
+      rotate(-4deg);
+  }
+
+  68% {
+    opacity: 1;
+
+    transform:
+      translate3d(
+        0,
+        -4px,
+        0
+      )
+      scale(1.06)
+      rotate(1deg);
+  }
+
+  100% {
+    opacity: 1;
+
+    transform:
+      translate3d(
+        0,
+        0,
+        0
+      )
+      scale(1)
+      rotate(0deg);
+  }
+}
+
+@keyframes halloween-loader-copy-in {
+  from {
+    opacity: 0;
+
+    transform:
+      translate3d(
+        0,
+        10px,
+        0
+      );
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translate3d(
+        0,
+        0,
+        0
+      );
+  }
+}
+
+/* ---------- MOBILE: same sequence, lighter motion ---------- */
+
+@media (max-width: 767px) {
+  .halloween-loader-scene .halloween-forest-back {
+    transform:
+      translate3d(
+        0,
+        28%,
+        0
+      ) !important;
+  }
+
+  .halloween-loader-scene .halloween-forest-front {
+    transform:
+      translate3d(
+        0,
+        36%,
+        0
+      ) !important;
+  }
+
+  .halloween-loader-visuals-ready
+    .halloween-loader-scene
+    .halloween-forest-back {
+    animation-duration:
+      560ms !important;
+  }
+
+  .halloween-loader-visuals-ready
+    .halloween-loader-scene
+    .halloween-forest-front {
+    animation-duration:
+      610ms !important;
+  }
+
+  .halloween-loader-pumpkin-stage {
+    transform:
+      translate3d(
+        0,
+        16px,
+        0
+      )
+      scale(0.78)
+      rotate(-3deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .halloween-loader-scene .halloween-stars,
+  .halloween-loader-scene .halloween-moon-wrap,
+  .halloween-loader-scene .halloween-web,
+  .halloween-loader-scene .halloween-clouds,
+  .halloween-loader-scene .halloween-fog,
+  .halloween-loader-scene .halloween-forest,
+  .halloween-loader-pumpkin-stage,
+  .halloween-loader-brand,
+  .halloween-loader-edition,
+  .halloween-loader-keywords,
+  .halloween-loader-progress {
+    animation-duration:
+      0.01ms !important;
+
+    animation-delay:
+      0ms !important;
+  }
+}
