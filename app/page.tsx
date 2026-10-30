@@ -12,16 +12,11 @@ import LoadingScreen from "@/components/Loading/LoadingScreen";
 import ExpertiseSection from "@/components/Expertise/ExpertiseSection";
 import NextChapterRadarController from "@/components/NextChapter/NextChapterRadarController";
 import ProfessionalReferencesController from "@/components/References/ProfessionalReferencesController";
-import SeasonalHalloween from "@/components/Seasonal/SeasonalHalloween";
 import PageProgress from "@/components/Progress/PageProgress";
 
 import type {
   Language,
 } from "@/data/timeline";
-
-import {
-  shouldUseHalloweenSeason,
-} from "@/lib/season";
 
 export default function Home() {
   const [
@@ -51,11 +46,6 @@ export default function Home() {
     setShowLoader,
   ] = useState(true);
 
-  const [
-    loaderReady,
-    setLoaderReady,
-  ] = useState(false);
-
   const startedAt =
     useRef(
       Date.now()
@@ -64,6 +54,10 @@ export default function Home() {
   useEffect(() => {
     document.documentElement.classList.add(
       "theme-dark"
+    );
+
+    document.documentElement.removeAttribute(
+      "data-season"
     );
 
     localStorage.setItem(
@@ -99,26 +93,11 @@ export default function Home() {
         "damergi-intro-seen"
       );
 
-    const halloween =
-      shouldUseHalloweenSeason();
-
-    if (halloween) {
-      setLoaderDuration(
-        alreadySeen
-          ? 2200
-          : 2600
-      );
-    } else if (
+    setLoaderDuration(
       alreadySeen
-    ) {
-      setLoaderDuration(
-        850
-      );
-    } else {
-      setLoaderDuration(
-        2600
-      );
-    }
+        ? 850
+        : 2600
+    );
 
     if (!alreadySeen) {
       localStorage.setItem(
@@ -168,40 +147,6 @@ export default function Home() {
       return;
     }
 
-    const halloween =
-      shouldUseHalloweenSeason();
-
-    setLoaderReady(
-      true
-    );
-
-    /*
-      Halloween intentionally plays from 0 -> 100%
-      AFTER the real page has finished loading.
-      This prevents hydration / asset loading time from
-      eating most of the seasonal intro.
-    */
-    if (halloween) {
-      const timer =
-        window.setTimeout(
-          () => {
-            setShowLoader(
-              false
-            );
-          },
-          loaderDuration
-        );
-
-      return () => {
-        window.clearTimeout(
-          timer
-        );
-      };
-    }
-
-    /*
-      Normal DAMERGI intro keeps the original smart timing.
-    */
     const elapsed =
       Date.now() -
       startedAt.current;
@@ -254,21 +199,6 @@ export default function Home() {
   return (
     <>
       <PageProgress />
-
-      <SeasonalHalloween
-        language={
-          language
-        }
-        loaderVisible={
-          showLoader
-        }
-        loaderReady={
-          loaderReady
-        }
-        loaderDurationMs={
-          loaderDuration
-        }
-      />
 
       <LoadingScreen
         visible={

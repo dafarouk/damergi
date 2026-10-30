@@ -1078,15 +1078,21 @@ export default function StoryHero({
 
               </div>
 
-              <Image
-                src="/images/portrait/portrait-farouk-3.png"
-                alt="Ahmed-Farouk DAMERGI"
-                width={540}
-                height={800}
-                priority
-                draggable={false}
-                className="pointer-events-none absolute bottom-0 left-1/2 z-10 max-h-[390px] w-auto -translate-x-1/2 select-none object-contain drop-shadow-[0_25px_35px_rgba(15,23,42,0.18)] sm:max-h-[490px]"
-              />
+              <div className="portrait-orbit portrait-orbit-mobile">
+                <div className="portrait-orbit-rotor" aria-hidden="true" />
+                <div className="portrait-orbit-photo">
+                  <Image
+                    src="/images/portrait/portrait-farouk-4.png"
+                    alt="Ahmed-Farouk DAMERGI"
+                    fill
+                    sizes="(max-width: 639px) 300px, (max-width: 1023px) 350px, 390px"
+                    priority
+                    unoptimized
+                    draggable={false}
+                    className="pointer-events-none select-none object-cover object-center"
+                  />
+                </div>
+              </div>
 
             </motion.div>
 
@@ -1560,19 +1566,21 @@ function DesktopPortrait() {
         }
       >
 
-        <Image
-          src="/images/portrait/portrait-farouk-3.png"
-          alt="Ahmed-Farouk DAMERGI"
-          width={
-            540
-          }
-          height={
-            800
-          }
-          priority
-          draggable={false}
-          className="pointer-events-none max-h-[560px] w-auto select-none object-contain drop-shadow-[0_30px_38px_rgba(15,23,42,0.18)]"
-        />
+        <div className="portrait-orbit portrait-orbit-desktop">
+          <div className="portrait-orbit-rotor" aria-hidden="true" />
+          <div className="portrait-orbit-photo">
+            <Image
+              src="/images/portrait/portrait-farouk-4.png"
+              alt="Ahmed-Farouk DAMERGI"
+              fill
+              sizes="(max-width: 639px) 300px, (max-width: 1023px) 350px, 390px"
+              priority
+              unoptimized
+              draggable={false}
+              className="pointer-events-none select-none object-cover object-center"
+            />
+          </div>
+        </div>
 
       </motion.div>
 

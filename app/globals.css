@@ -1731,3 +1731,81 @@ html.theme-dark
       0.01ms !important;
   }
 }
+/* DAMERGI CIRCULAR EXECUTIVE PORTRAIT */
+.portrait-orbit {
+  position: absolute;
+  left: 50%;
+  z-index: 10;
+  width: 390px;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  pointer-events: none;
+  isolation: isolate;
+}
+
+.portrait-orbit-desktop {
+  bottom: 73px;
+}
+
+.portrait-orbit-mobile {
+  width: min(75vw, 292px);
+  bottom: 40px;
+}
+
+.portrait-orbit::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0.12;
+  box-shadow: 0 0 40px var(--gold-halo);
+}
+
+.portrait-orbit-rotor {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    var(--gold) 0deg,
+    transparent 52deg,
+    var(--gold-dark) 105deg,
+    var(--gold) 175deg,
+    transparent 225deg,
+    var(--gold-dark) 295deg,
+    var(--gold) 360deg
+  );
+  animation: portrait-orbit-spin 16s linear infinite;
+  will-change: transform;
+}
+
+.portrait-orbit-photo {
+  position: absolute;
+  inset: 8px;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: #d8d8d8;
+  box-shadow:
+    0 18px 42px rgba(0,0,0,0.3),
+    inset 0 0 0 2px rgba(255,255,255,0.12);
+}
+
+@keyframes portrait-orbit-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .portrait-orbit-mobile {
+    width: 350px;
+    bottom: 55px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portrait-orbit-rotor {
+    animation: none;
+  }
+}
